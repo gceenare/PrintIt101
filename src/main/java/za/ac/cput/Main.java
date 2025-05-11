@@ -24,6 +24,5 @@ public class Main {
 
         PlacementData placementData = new PlacementData.Builder().setPlacementDataId(21).setPosition(position).setRotation(rotation).setScale(scale).build();
         System.out.println(placementData);
-
     }
 }
