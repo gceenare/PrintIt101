@@ -36,9 +36,9 @@ public class Contact {
     }
 
     public static class Builder{
-        private int contactId;
-        private int phoneNumber;
-        private String email;
+        protected int contactId;
+        protected int phoneNumber;
+        protected String email;
 
         public Builder setContactId(int contactId) {
             this.contactId = contactId;

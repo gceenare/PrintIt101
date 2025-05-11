@@ -8,20 +8,15 @@
 
 package za.ac.cput.domain;
 
-public class Customer {
-    protected String userId;
+public class Customer extends User {
     protected double customerDiscount;
 
     private Customer() {
     }
 
     private Customer(Builder builder) {
-        this.userId = builder.userId;
+        super(builder);
         this.customerDiscount = builder.customerDiscount;
-    }
-
-    public String getUserId() {
-        return userId;
     }
 
     public double getCustomerDiscount() {
@@ -31,19 +26,12 @@ public class Customer {
     @Override
     public String toString() {
         return "Customer{" +
-                "userId='" + userId + '\'' +
-                ", customerDiscount=" + customerDiscount +
-                '}';
+                "customerDiscount=" + customerDiscount +
+                "} " + super.toString();
     }
 
-    public static class Builder {
-        private String userId;
+    public static class Builder extends User.Builder {
         private double customerDiscount;
-
-        public Builder setUserId(String userId) {
-            this.userId = userId;
-            return this;
-        }
 
         public Builder setCustomerDiscount(double customerDiscount) {
             this.customerDiscount = customerDiscount;
@@ -51,7 +39,7 @@ public class Customer {
         }
 
         public Builder copy(Customer customer) {
-            this.userId = customer.userId;
+            super.copy(customer);
             this.customerDiscount = customer.customerDiscount;
             return this;
         }
