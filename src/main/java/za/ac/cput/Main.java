@@ -19,7 +19,7 @@ public class Main {
         Rotation rotation = new Rotation.Builder().setX(20).setY(15).setZ(10).build();
         System.out.println(rotation);
 
-        Scale scale = new Scale.Builder().setX(3).setY(6).setZ(9).build();
+        Scale scale = new Scale.Builder().setX(3).setY(6).setZ(12).build();
         System.out.println(scale);
 
         PlacementData placementData = new PlacementData.Builder().setPlacementDataId(21).setPosition(position).setRotation(rotation).setScale(scale).build();
