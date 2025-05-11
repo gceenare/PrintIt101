@@ -10,10 +10,10 @@ public class User {
     protected String password;
     protected String role;
 
-    private User(){
+    protected User(){
     }
 
-    private User(Builder builder){
+    protected User(Builder builder){
         this.userId = builder.userId;
         this.contact = builder.contact;
         this.firstName = builder.firstName;
