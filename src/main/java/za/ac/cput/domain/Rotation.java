@@ -1,8 +1,7 @@
 /* Rotation.java
    Rotation POJO class
    Author: Siyabulela Mgijima (230680305)
-   Date: 11 May 2025
-*/
+   Date: 11 May 2025 */
 package za.ac.cput.domain;
 
 public class Rotation {
