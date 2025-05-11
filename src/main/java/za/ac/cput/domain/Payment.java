@@ -1,10 +1,18 @@
 package za.ac.cput.domain;
 
+/* Paymeny.java
+
+     Payment POJO class
+
+     Author: G Mbabe (222836040)
+
+     Date: 11 May 2025 */
+
 public class Payment {
 
     protected int paymentId;
     protected double amount;
-    protected String paymentMethod;
+    protected paymentMethod paymentMethod;
     protected String paymentDate;
     private String paymentStatus;
 
@@ -23,7 +31,7 @@ public class Payment {
     public double getAmount() {
         return amount;
     }
-    public String getPaymentMethod() {
+    public paymentMethod getPaymentMethod() {
         return paymentMethod;
     }
     public String getPaymentDate() {
@@ -37,15 +45,16 @@ public class Payment {
         return "Payment{" +
                 "paymentId=" + paymentId +
                 ", amount=" + amount +
-                ", paymentMethod='" + paymentMethod + '\'' +
+                ", paymentMethod=" + paymentMethod +
                 ", paymentDate='" + paymentDate + '\'' +
                 ", paymentStatus='" + paymentStatus + '\'' +
                 '}';
     }
+
     public static class Builder {
         private int paymentId;
         private double amount;
-        private String paymentMethod;
+        private paymentMethod paymentMethod;
         private String paymentDate;
         private String paymentStatus;
 
@@ -53,27 +62,22 @@ public class Payment {
             this.paymentId = paymentId;
             return this;
         }
-
         public Builder setAmount(double amount) {
             this.amount = amount;
             return this;
         }
-
-        public Builder setPaymentMethod(String paymentMethod) {
+        public Builder setPaymentMethod(paymentMethod paymentMethod) {
             this.paymentMethod = paymentMethod;
             return this;
         }
-
         public Builder setPaymentDate(String paymentDate) {
             this.paymentDate = paymentDate;
             return this;
         }
-
         public Builder setPaymentStatus(String paymentStatus) {
             this.paymentStatus = paymentStatus;
             return this;
         }
-
         public Builder copy(Payment payment) {
             this.paymentId = payment.paymentId;
             this.amount = payment.amount;
@@ -82,12 +86,8 @@ public class Payment {
             this.paymentStatus = payment.paymentStatus;
             return this;
         }
-
         public Payment build() {
             return new Payment(this);
         }
     }
-
-
-
 }

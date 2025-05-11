@@ -1,5 +1,13 @@
 package za.ac.cput.domain;
 
+/* OrderItem.java
+
+     OrderItem POJO class
+
+     Author: G Mbabe (222836040)
+
+     Date: 11 May 2025 */
+
 public class OrderItem {
 
     protected int orderItemId;
