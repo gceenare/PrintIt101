@@ -1,3 +1,11 @@
+/*   Customer.java
+
+     Customer POJO class
+
+     Author: Zakhir McKinnon (22016299)
+
+     Date: 11 May 2025 */
+
 package za.ac.cput.domain;
 
 public class Customer extends User {
