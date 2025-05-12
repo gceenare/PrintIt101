@@ -16,9 +16,9 @@ public class Order {
     protected OrderItem orderItem;
     protected OrderStatus orderStatus;
 
-    public Order() {
+    private Order() {
     }
-    public Order(Builder builder) {
+    private Order(Builder builder) {
         this.orderId = builder.orderId;
         this.userId = builder.userId;
         this.paymentId = builder.paymentId;
