@@ -6,7 +6,7 @@ package za.ac.cput.domain;
 
 public class Contact {
     protected int contactId;
-    protected int phoneNumber;
+    protected String phoneNumber;
     protected String email;
 
     private Contact(){
@@ -22,7 +22,7 @@ public class Contact {
         return contactId;
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
@@ -41,7 +41,7 @@ public class Contact {
 
     public static class Builder{
         protected int contactId;
-        protected int phoneNumber;
+        protected String phoneNumber;
         protected String email;
 
         public Builder setContactId(int contactId) {
@@ -49,7 +49,7 @@ public class Contact {
             return this;
         }
 
-        public Builder setPhoneNumber(int phoneNumber) {
+        public Builder setPhoneNumber(String phoneNumber) {
             this.phoneNumber = phoneNumber;
             return this;
         }

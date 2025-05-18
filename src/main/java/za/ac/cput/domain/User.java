@@ -6,8 +6,8 @@ package za.ac.cput.domain;
 
 public class User {
     protected int userId;
-    protected Address address;
-    protected Contact contact;
+    protected int addressId;
+    protected int contactId;
     protected String firstName;
     protected String lastName;
     protected String userName;
@@ -19,7 +19,8 @@ public class User {
 
     protected User(Builder builder){
         this.userId = builder.userId;
-        this.contact = builder.contact;
+        this.addressId = builder.addressId;
+        this.contactId = builder.contactId;
         this.firstName = builder.firstName;
         this.lastName = builder.lastName;
         this.userName = builder.userName;
@@ -31,12 +32,12 @@ public class User {
         return userId;
     }
 
-    public Address getAddress() {
-        return address;
+    public int getAddressId() {
+        return addressId;
     }
 
-    public Contact getContact() {
-        return contact;
+    public int getContactId() {
+        return contactId;
     }
 
     public String getFirstName() {
@@ -63,8 +64,8 @@ public class User {
     public String toString() {
         return "User{" +
                 "userId=" + userId +
-                ", address=" + address +
-                ", contact=" + contact +
+                ", address=" + addressId +
+                ", contact=" + contactId +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", userName='" + userName + '\'' +
@@ -75,8 +76,8 @@ public class User {
 
     public static class Builder{
         private int userId;
-        private Address address;
-        private Contact contact;
+        private int addressId;
+        private int contactId;
         private String firstName;
         private String lastName;
         private String userName;
@@ -88,13 +89,13 @@ public class User {
             return this;
         }
 
-        public Builder setAddress(Address address) {
-            this.address = address;
+        public Builder setAddressId(int addressId) {
+            this.addressId = addressId;
             return this;
         }
 
-        public Builder setContact(Contact contact) {
-            this.contact = contact;
+        public Builder setContactId(int contactId) {
+            this.contactId = contactId;
             return this;
         }
 
@@ -125,8 +126,8 @@ public class User {
 
         public Builder copy(User user){
             this.userId = user.userId;
-            this.address = user.address;
-            this.contact = user.contact;
+            this.addressId = user.addressId;
+            this.contactId = user.contactId;
             this.firstName = user.firstName;
             this.lastName = user.lastName;
             this.userName = user.userName;
