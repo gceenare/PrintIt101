@@ -16,9 +16,9 @@ public class Order {
     protected OrderItem orderItem;
     protected OrderStatus orderStatus;
 
-    public Order() {
+    private Order() {
     }
-    public Order(Builder builder) {
+    private Order(Builder builder) {
         this.orderId = builder.orderId;
         this.userId = builder.userId;
         this.paymentId = builder.paymentId;
@@ -91,15 +91,16 @@ public class Order {
             this.orderStatus = orderStatus;
             return this;
         }
-        public Builder copy(){
-            this.orderId = orderId;
-            this.userId = userId;
-            this.paymentId = paymentId;
-            this.addressId = addressId;
-            this.orderItem = orderItem;
-            this.orderStatus = orderStatus;
+        public Builder copy(Order order) {
+            this.orderId = order.orderId;
+            this.userId = order.userId;
+            this.paymentId = order.paymentId;
+            this.addressId = order.addressId;
+            this.orderItem = order.orderItem;
+            this.orderStatus = order.orderStatus;
             return this;
         }
+
         public Order build(){
             return new Order(this);
         }
