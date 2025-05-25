@@ -12,7 +12,7 @@ public class Payment {
 
     protected int paymentId;
     protected double amount;
-    protected paymentMethod paymentMethod;
+    protected PaymentMethod paymentMethod;
     protected String paymentDate;
     private String paymentStatus;
 
@@ -31,7 +31,7 @@ public class Payment {
     public double getAmount() {
         return amount;
     }
-    public paymentMethod getPaymentMethod() {
+    public PaymentMethod getPaymentMethod() {
         return paymentMethod;
     }
     public String getPaymentDate() {
@@ -45,7 +45,7 @@ public class Payment {
         return "Payment{" +
                 "paymentId=" + paymentId +
                 ", amount=" + amount +
-                ", paymentMethod=" + paymentMethod +
+                ", PaymentMethod=" + paymentMethod +
                 ", paymentDate='" + paymentDate + '\'' +
                 ", paymentStatus='" + paymentStatus + '\'' +
                 '}';
@@ -54,7 +54,7 @@ public class Payment {
     public static class Builder {
         private int paymentId;
         private double amount;
-        private paymentMethod paymentMethod;
+        private PaymentMethod paymentMethod;
         private String paymentDate;
         private String paymentStatus;
 
@@ -66,7 +66,7 @@ public class Payment {
             this.amount = amount;
             return this;
         }
-        public Builder setPaymentMethod(paymentMethod paymentMethod) {
+        public Builder setPaymentMethod(PaymentMethod paymentMethod) {
             this.paymentMethod = paymentMethod;
             return this;
         }
