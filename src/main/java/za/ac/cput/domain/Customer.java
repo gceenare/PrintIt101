@@ -1,9 +1,13 @@
 package za.ac.cput.domain;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "customers")
 public class Customer extends User {
     protected double customerDiscount;
 
-    private Customer() {
+    protected Customer() {
     }
 
     private Customer(Builder builder) {
