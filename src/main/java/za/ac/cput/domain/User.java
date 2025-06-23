@@ -3,8 +3,15 @@
   Author: Thabiso Mbatha (22016299)
   Date: 11 May 2025 */
 package za.ac.cput.domain;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "users")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     protected int userId;
     protected int addressId;
     protected int contactId;

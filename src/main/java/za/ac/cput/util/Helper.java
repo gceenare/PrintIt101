@@ -19,4 +19,21 @@ public class Helper {
         //todo
         return true;
     }
+
+    public static boolean doubleIsInvalid(double value) {
+        return value <= 0 || Double.isNaN(value) || Double.isInfinite(value);
+    }
+
+    public static boolean isAngleValid(double angle) {
+        return !(angle >= -360) || !(angle <= 360);
+    }
+
+    public static boolean areAllObjectsNotNull(Object... objects) {
+        for (Object obj : objects) {
+            if (obj == null) return false;
+        }
+        return true;
+    }
+
+
 }
