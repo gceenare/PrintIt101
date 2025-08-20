@@ -1,12 +1,17 @@
 package za.ac.cput;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import za.ac.cput.domain.*;
 import za.ac.cput.factory.AddressFactory;
 import za.ac.cput.factory.ContactFactory;
 import za.ac.cput.factory.UserFactory;
 
+@SpringBootApplication
 public class Main {
     public static void main(String[] args) {
+        SpringApplication.run(Main.class, args);
+
         Address a = new Address.Builder().setAddressId(2).setBuildingName("CEEPEEYOUTEE").build();
         System.out.println(a);
 
