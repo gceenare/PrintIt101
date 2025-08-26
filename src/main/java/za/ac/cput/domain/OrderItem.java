@@ -1,23 +1,34 @@
 package za.ac.cput.domain;
 
+import jakarta.persistence.*;
+
 /* OrderItem.java
+   OrderItem POJO class
+   Author: G Mbabe (222836040)
+   Date: 11 May 2025 */
 
-     OrderItem POJO class
-
-     Author: G Mbabe (222836040)
-
-     Date: 11 May 2025 */
-
+@Entity
+@Table(name = "order_items")
 public class OrderItem {
 
+    @Id
+    @Column(name = "order_item_id", nullable = false)
     protected int orderItemId;
 
+    @Column(name = "product_id", nullable = false)
     protected int productId;
+
+    @Column(name = "quantity", nullable = false)
     protected int quantity;
+
+    @Column(name = "price_per_unit", nullable = false)
     protected double pricePerUnit;
 
+    @OneToOne
+    @JoinColumn(name = "order_id", nullable = false)
+    protected Order order;
 
-    private OrderItem() {
+    protected OrderItem() {
     }
 
     private OrderItem(Builder builder) {
@@ -30,6 +41,7 @@ public class OrderItem {
     public int getOrderItemId() {
         return orderItemId;
     }
+
     public int getProductId() {
         return productId;
     }
@@ -37,9 +49,11 @@ public class OrderItem {
     public int getQuantity() {
         return quantity;
     }
+
     public double getPricePerUnit() {
         return pricePerUnit;
     }
+
     @Override
     public String toString() {
         return "OrderItem{" +
@@ -49,6 +63,7 @@ public class OrderItem {
                 ", pricePerUnit=" + pricePerUnit +
                 '}';
     }
+
     public static class Builder {
         private int orderItemId;
         private int productId;
@@ -74,6 +89,7 @@ public class OrderItem {
             this.pricePerUnit = pricePerUnit;
             return this;
         }
+
         public Builder copy(OrderItem orderItem) {
             this.orderItemId = orderItem.orderItemId;
             this.productId = orderItem.productId;
@@ -86,5 +102,4 @@ public class OrderItem {
             return new OrderItem(this);
         }
     }
-
 }

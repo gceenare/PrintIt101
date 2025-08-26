@@ -1,5 +1,7 @@
 package za.ac.cput.domain;
 
+import jakarta.persistence.*;
+
 /*
 Order.java
 Order POJO class
@@ -7,17 +9,34 @@ Author: L Mbangata (222558156)
 Date: 11 May 2025
  */
 
+@Entity
+@Table(name = "orders")
 public class Order {
 
+    @Id
+    @Column(name = "order_id", nullable = false)
     protected String orderId;
+
+    @Column(name = "user_id", nullable = false)
     protected int userId;
+
+    @Column(name = "payment_id", nullable = false)
     protected int paymentId;
+
+    @Column(name = "address_id", nullable = false)
     protected int addressId;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_item_id", nullable = false)
     protected OrderItem orderItem;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "order_status", nullable = false)
     protected OrderStatus orderStatus;
 
-    private Order() {
+    protected Order() {
     }
+
     private Order(Builder builder) {
         this.orderId = builder.orderId;
         this.userId = builder.userId;
@@ -25,7 +44,6 @@ public class Order {
         this.addressId = builder.addressId;
         this.orderItem = builder.orderItem;
         this.orderStatus = builder.orderStatus;
-
     }
 
     public String getOrderId() {
@@ -35,15 +53,19 @@ public class Order {
     public int getUserId() {
         return userId;
     }
+
     public int getPaymentId() {
         return paymentId;
     }
+
     public int getAddressId() {
         return addressId;
     }
+
     public OrderItem getOrderItem() {
         return orderItem;
     }
+
     public OrderStatus getOrderStatus(){
         return orderStatus;
     }
@@ -59,6 +81,7 @@ public class Order {
                 ", orderStatus=" + orderStatus +
                 '}';
     }
+
     public static class Builder {
         protected String orderId;
         protected int userId;
@@ -71,26 +94,32 @@ public class Order {
             this.orderId = orderId;
             return this;
         }
+
         public Builder setUserId(int userId) {
             this.userId = userId;
             return this;
         }
+
         public Builder setPaymentId(int paymentId) {
             this.paymentId = paymentId;
             return this;
         }
+
         public Builder setAddressId(int addressId) {
             this.addressId = addressId;
             return this;
         }
+
         public Builder setOrderItem(OrderItem orderItem) {
             this.orderItem = orderItem;
             return this;
         }
+
         public Builder setOrderStatus(OrderStatus orderStatus){
             this.orderStatus = orderStatus;
             return this;
         }
+
         public Builder copy(Order order) {
             this.orderId = order.orderId;
             this.userId = order.userId;
@@ -104,6 +133,5 @@ public class Order {
         public Order build(){
             return new Order(this);
         }
-
     }
 }
