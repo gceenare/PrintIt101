@@ -5,20 +5,28 @@
 
 package za.ac.cput.domain;
 
-public class Address {
-    protected int addressId;
-    protected int propertyNumber;
-    protected String buildingName;
-    protected int unitNumber;
-    protected int poBoxNumber;
-    protected String street;
-    protected String municipality;
-    protected String province;
-    protected String postalCode;
-    protected String country;
+import jakarta.persistence.*;
+import java.util.Objects;
 
-    private Address(){
-    }
+
+@Entity
+@Table(name = "addresses")
+public class Address {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int addressId;
+
+    private int propertyNumber;
+    private String buildingName;
+    private int unitNumber;
+    private int poBoxNumber;
+    private String street;
+    private String municipality;
+    private String province;
+    private String postalCode;
+    private String country;
+
+    protected Address() {}
 
     private Address(Builder builder){
         this.addressId = builder.addressId;
@@ -33,45 +41,16 @@ public class Address {
         this.country = builder.country;
     }
 
-    public int getAddressId() {
-        return addressId;
-    }
-
-    public int getPropertyNumber() {
-        return propertyNumber;
-    }
-
-    public String getBuildingName() {
-        return buildingName;
-    }
-
-    public int getUnitNumber() {
-        return unitNumber;
-    }
-
-    public int getPoBoxNumber() {
-        return poBoxNumber;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public String getMunicipality() {
-        return municipality;
-    }
-
-    public String getProvince() {
-        return province;
-    }
-
-    public String getPostalCode() {
-        return postalCode;
-    }
-
-    public String getCountry() {
-        return country;
-    }
+    public int getAddressId() { return addressId; }
+    public int getPropertyNumber() { return propertyNumber; }
+    public String getBuildingName() { return buildingName; }
+    public int getUnitNumber() { return unitNumber; }
+    public int getPoBoxNumber() { return poBoxNumber; }
+    public String getStreet() { return street; }
+    public String getMunicipality() { return municipality; }
+    public String getProvince() { return province; }
+    public String getPostalCode() { return postalCode; }
+    public String getCountry() { return country; }
 
     @Override
     public String toString() {
@@ -89,63 +68,67 @@ public class Address {
                 '}';
     }
 
-    public static class Builder{
-        protected int addressId;
-        protected int propertyNumber;
-        protected String buildingName;
-        protected int unitNumber;
-        protected int poBoxNumber;
-        protected String street;
-        protected String municipality;
-        protected String province;
-        protected String postalCode;
-        protected String country;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Address address = (Address) o;
+        return addressId == address.addressId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(addressId);
+    }
+
+    public static class Builder {
+        private int addressId;
+        private int propertyNumber;
+        private String buildingName;
+        private int unitNumber;
+        private int poBoxNumber;
+        private String street;
+        private String municipality;
+        private String province;
+        private String postalCode;
+        private String country;
 
         public Builder setAddressId(int addressId) {
             this.addressId = addressId;
             return this;
         }
-
         public Builder setPropertyNumber(int propertyNumber) {
             this.propertyNumber = propertyNumber;
             return this;
         }
-
         public Builder setBuildingName(String buildingName) {
             this.buildingName = buildingName;
             return this;
         }
-
         public Builder setUnitNumber(int unitNumber) {
             this.unitNumber = unitNumber;
             return this;
         }
-
         public Builder setPoBoxNumber(int poBoxNumber) {
             this.poBoxNumber = poBoxNumber;
             return this;
         }
-
         public Builder setStreet(String street) {
             this.street = street;
             return this;
         }
-
         public Builder setMunicipality(String municipality) {
             this.municipality = municipality;
             return this;
         }
-
         public Builder setProvince(String province) {
             this.province = province;
             return this;
         }
-
         public Builder setPostalCode(String postalCode) {
             this.postalCode = postalCode;
             return this;
         }
-
         public Builder setCountry(String country) {
             this.country = country;
             return this;
@@ -170,3 +153,4 @@ public class Address {
         }
     }
 }
+

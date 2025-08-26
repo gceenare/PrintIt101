@@ -1,21 +1,18 @@
 package za.ac.cput.factory;
 
+import za.ac.cput.domain.Address;
+import za.ac.cput.domain.Contact;
 import za.ac.cput.domain.Customer;
 import za.ac.cput.util.Helper;
 
 public class CustomerFactory {
-    public static Customer createCustomer(int userId, int addressId, int contactId, String firstName, String lastName,
-                                          double customerDiscount, String userName, String password, String role) {
-        if (Helper.intIsNull(userId) || Helper.intIsNull(addressId) || Helper.intIsNull(contactId)
-                || Helper.isNullOrEmpty(firstName) || Helper.isNullOrEmpty(lastName)
-                || customerDiscount < 0) {
+    public static Customer createCustomer(Address address, Contact contact, String firstName, String lastName, double customerDiscount, String userName, String password, String role) {
+        if (!Helper.areAllObjectsNotNull(address, contact) || Helper.isNullOrEmpty(firstName) || Helper.isNullOrEmpty(lastName) || Helper.isNullOrEmpty(userName) || Helper.isNullOrEmpty(password) || Helper.isNullOrEmpty(role) || Helper.doubleIsInvalid(customerDiscount)) {
             return null;
         }
-
         return new Customer.Builder()
-                .setUserId(userId)
-                .setAddressId(addressId)
-                .setContactId(contactId)
+                .setAddress(address)
+                .setContact(contact)
                 .setFirstName(firstName)
                 .setLastName(lastName)
                 .setUserName(userName)
