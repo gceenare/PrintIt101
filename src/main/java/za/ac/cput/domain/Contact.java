@@ -4,13 +4,21 @@
      Date: 11 May 2025 */
 package za.ac.cput.domain;
 
-public class Contact {
-    protected int contactId;
-    protected String phoneNumber;
-    protected String email;
+import jakarta.persistence.*;
 
-    private Contact(){
-    }
+import java.util.Objects;
+
+@Entity
+@Table(name = "contacts")
+public class Contact {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int contactId;
+
+    private String phoneNumber;
+    private String email;
+
+    protected Contact() {}
 
     private Contact(Builder builder){
         this.contactId = builder.contactId;
@@ -18,42 +26,45 @@ public class Contact {
         this.email = builder.email;
     }
 
-    public int getContactId() {
-        return contactId;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public String getEmail() {
-        return email;
-    }
+    public int getContactId() { return contactId; }
+    public String getPhoneNumber() { return phoneNumber; }
+    public String getEmail() { return email; }
 
     @Override
     public String toString() {
         return "Contact{" +
                 "contactId=" + contactId +
-                ", phoneNumber=" + phoneNumber +
+                ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 '}';
     }
 
-    public static class Builder{
-        protected int contactId;
-        protected String phoneNumber;
-        protected String email;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Contact contact = (Contact) o;
+        return contactId == contact.contactId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(contactId);
+    }
+
+    public static class Builder {
+        private int contactId;
+        private String phoneNumber;
+        private String email;
 
         public Builder setContactId(int contactId) {
             this.contactId = contactId;
             return this;
         }
-
         public Builder setPhoneNumber(String phoneNumber) {
             this.phoneNumber = phoneNumber;
             return this;
         }
-
         public Builder setEmail(String email) {
             this.email = email;
             return this;
