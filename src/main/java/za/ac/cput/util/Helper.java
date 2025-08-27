@@ -8,7 +8,7 @@ public class Helper {
         return false;
     }
 
-    public static boolean intIsNull(long i) {
+    public static boolean intIsNull(int i) {
         if (i <= 0) {
             return true;
         }
