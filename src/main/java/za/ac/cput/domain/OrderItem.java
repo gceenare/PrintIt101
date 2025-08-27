@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 /* OrderItem.java
    OrderItem POJO class
-   Author: G Mbabe (222836040)
+   Author: L Mbangata (222558156)
    Date: 11 May 2025 */
 
 @Entity
