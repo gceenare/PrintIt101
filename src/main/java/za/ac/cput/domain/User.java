@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long userId;
+    protected int userId;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
@@ -50,7 +50,7 @@ public abstract class User {
 
     // Generic Builder
     public static abstract class Builder<T extends Builder<T>> {
-        private Long userId;
+        private int userId;
         private Address address;
         private Contact contact;
         private String firstName;
@@ -59,7 +59,7 @@ public abstract class User {
         private String password;
         private String role;
 
-        public T setUserId(Long userId) {
+        public T setUserId(int userId) {
             this.userId = userId;
             return self();
         }

@@ -1,5 +1,9 @@
 package za.ac.cput.domain;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "tshirt")
 public class TShirt extends Product {
     private String name;
     private String description;
@@ -7,7 +11,7 @@ public class TShirt extends Product {
     private String color;
     private String size;
 
-    private TShirt() {}
+    protected TShirt() {} // Default constructor for JPA
 
     private TShirt(Builder builder) {
         this.productId = builder.productId;
@@ -38,30 +42,31 @@ public class TShirt extends Product {
                 ", size='" + size + '\'' +
                 ", designId=" + designId +
                 ", placementDataId=" + placementDataId +
+                ", productType='" + productType + '\'' +
                 '}';
     }
 
     public static class Builder {
-        private int productId;
-        private int designId;
-        private int placementDataId;
+        private Integer productId; // Changed to Integer to match Product
+        private Integer designId;
+        private Integer placementDataId;
         private String name;
         private String description;
         private double price;
         private String color;
         private String size;
 
-        public Builder setProductId(int productId) {
+        public Builder setProductId(Integer productId) {
             this.productId = productId;
             return this;
         }
 
-        public Builder setDesignId(int designId) {
+        public Builder setDesignId(Integer designId) {
             this.designId = designId;
             return this;
         }
 
-        public Builder setPlacementDataId(int placementDataId) {
+        public Builder setPlacementDataId(Integer placementDataId) {
             this.placementDataId = placementDataId;
             return this;
         }
