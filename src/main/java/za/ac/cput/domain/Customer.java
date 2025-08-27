@@ -2,13 +2,14 @@ package za.ac.cput.domain;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "customers")
 public class Customer extends User {
-    protected double customerDiscount;
+    private double customerDiscount;
 
-    protected Customer() {
-    }
+    protected Customer() {}
 
     private Customer(Builder builder) {
         super(builder);
@@ -26,7 +27,20 @@ public class Customer extends User {
                 "} " + super.toString();
     }
 
-    public static class Builder extends User.Builder {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Customer customer = (Customer) o;
+        return Objects.equals(userId, customer.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId);
+    }
+
+    public static class Builder extends User.Builder<Builder> {
         private double customerDiscount;
 
         public Builder setCustomerDiscount(double customerDiscount) {
@@ -35,50 +49,7 @@ public class Customer extends User {
         }
 
         @Override
-        public Builder setUserId(int userId) {
-            super.setUserId(userId);
-            return this;
-        }
-
-        @Override
-        public Builder setAddressId(int addressId) {
-            super.setAddressId(addressId);
-            return this;
-        }
-
-        @Override
-        public Builder setContactId(int contactId) {
-            super.setContactId(contactId);
-            return this;
-        }
-
-        @Override
-        public Builder setFirstName(String firstName) {
-            super.setFirstName(firstName);
-            return this;
-        }
-
-        @Override
-        public Builder setLastName(String lastName) {
-            super.setLastName(lastName);
-            return this;
-        }
-
-        @Override
-        public Builder setUserName(String userName) {
-            super.setUserName(userName);
-            return this;
-        }
-
-        @Override
-        public Builder setPassword(String password) {
-            super.setPassword(password);
-            return this;
-        }
-
-        @Override
-        public Builder setRole(String role) {
-            super.setRole(role);
+        protected Builder self() {
             return this;
         }
 
