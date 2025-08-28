@@ -3,15 +3,25 @@ package za.ac.cput.domain;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "tshirt")
+@Table(name = "tshirts")
+@PrimaryKeyJoinColumn(name = "product_id")
 public class TShirt extends Product {
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
+
+    @Column(name = "description", length = 500)
     private String description;
+
+    @Column(name = "price", nullable = false)
     private double price;
+
+    @Column(name = "color", nullable = false, length = 50)
     private String color;
+
+    @Column(name = "size", nullable = false, length = 10)
     private String size;
 
-    protected TShirt() {} // Default constructor for JPA
+    private TShirt() {}
 
     private TShirt(Builder builder) {
         this.productId = builder.productId;
@@ -42,31 +52,30 @@ public class TShirt extends Product {
                 ", size='" + size + '\'' +
                 ", designId=" + designId +
                 ", placementDataId=" + placementDataId +
-                ", productType='" + productType + '\'' +
                 '}';
     }
 
     public static class Builder {
-        private Integer productId; // Changed to Integer to match Product
-        private Integer designId;
-        private Integer placementDataId;
+        private int productId;
+        private int designId;
+        private int placementDataId;
         private String name;
         private String description;
         private double price;
         private String color;
         private String size;
 
-        public Builder setProductId(Integer productId) {
+        public Builder setProductId(int productId) {
             this.productId = productId;
             return this;
         }
 
-        public Builder setDesignId(Integer designId) {
+        public Builder setDesignId(int designId) {
             this.designId = designId;
             return this;
         }
 
-        public Builder setPlacementDataId(Integer placementDataId) {
+        public Builder setPlacementDataId(int placementDataId) {
             this.placementDataId = placementDataId;
             return this;
         }
