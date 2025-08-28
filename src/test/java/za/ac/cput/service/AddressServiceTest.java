@@ -18,8 +18,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @TestMethodOrder(OrderAnnotation.class)
-@Transactional
-@Rollback
+//@Transactional
+//@Rollback
 class AddressServiceTest {
 
     @Autowired

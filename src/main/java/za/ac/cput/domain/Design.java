@@ -1,19 +1,18 @@
 package za.ac.cput.domain;
 
 import jakarta.persistence.*;
-import java.util.Objects;
 
 @Entity
-@Table(name = "designs") // lowercase is conventional for table names
+@Table(name = "designs")
 public class Design {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "design_id")
     private int designId;
 
+    @Column(name = "file_path", nullable = false, length = 255)
     private String filePath;
 
-    // Default constructor for JPA
     protected Design() {}
 
     private Design(Builder builder) {
@@ -37,20 +36,6 @@ public class Design {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Design)) return false;
-        Design design = (Design) o;
-        return designId == design.designId && Objects.equals(filePath, design.filePath);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(designId, filePath);
-    }
-
-    // Builder pattern
     public static class Builder {
         private int designId;
         private String filePath;
