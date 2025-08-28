@@ -48,6 +48,22 @@ public abstract class User {
                 '}';
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
     // Generic Builder
     public static abstract class Builder<T extends Builder<T>> {
         private int userId;
