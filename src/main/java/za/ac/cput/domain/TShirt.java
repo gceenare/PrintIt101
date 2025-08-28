@@ -21,7 +21,7 @@ public class TShirt extends Product {
     @Column(name = "size", nullable = false, length = 10)
     private String size;
 
-    private TShirt() {}
+    protected TShirt() {}
 
     private TShirt(Builder builder) {
         this.productId = builder.productId;

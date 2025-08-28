@@ -13,7 +13,7 @@ public class Design {
     @Column(name = "file_path", nullable = false, length = 255)
     private String filePath;
 
-    private Design() {}
+    protected Design() {}
 
     private Design(Builder builder) {
         this.designId = builder.designId;
