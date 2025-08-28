@@ -1,21 +1,37 @@
 /* Rotation.java
    Rotation POJO class
-   Author: Siyabulela Mgijima (230680305)
-   Date: 11 May 2025 */
+   Author: Siyabulela Mgijima
+   Date: 28 Aug 2025
+*/
+
 package za.ac.cput.domain;
 
-public class Rotation {
-    protected double x;
-    protected double y;
-    protected double z;
+import jakarta.persistence.*;
+import java.util.Objects;
 
-    private Rotation() {
-    }
+@Entity
+@Table(name = "rotations")
+public class Rotation {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int rotationId;
+
+    private double x;
+    private double y;
+    private double z;
+
+    protected Rotation() {}
 
     private Rotation(Builder builder) {
+        this.rotationId = builder.rotationId;
         this.x = builder.x;
         this.y = builder.y;
         this.z = builder.z;
+    }
+
+    public int getRotationId() {
+        return rotationId;
     }
 
     public double getX() {
@@ -25,7 +41,6 @@ public class Rotation {
     public double getY() {
         return y;
     }
-
     public double getZ() {
         return z;
     }
@@ -33,16 +48,36 @@ public class Rotation {
     @Override
     public String toString() {
         return "Rotation{" +
-                "x=" + x +
+                "rotationId=" + rotationId +
+                ", x=" + x +
                 ", y=" + y +
                 ", z=" + z +
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Rotation rotation = (Rotation) o;
+        return rotationId == rotation.rotationId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(rotationId);
+    }
+
     public static class Builder {
-        protected double x;
-        protected double y;
-        protected double z;
+        private int rotationId;
+        private double x;
+        private double y;
+        private double z;
+
+        public Builder setRotationId(int rotationId) {
+            this.rotationId = rotationId;
+            return this;
+        }
 
         public Builder setX(double x) {
             this.x = x;
@@ -60,6 +95,7 @@ public class Rotation {
         }
 
         public Builder copy(Rotation rotation) {
+            this.rotationId = rotation.rotationId;
             this.x = rotation.x;
             this.y = rotation.y;
             this.z = rotation.z;
@@ -71,5 +107,3 @@ public class Rotation {
         }
     }
 }
-
-
