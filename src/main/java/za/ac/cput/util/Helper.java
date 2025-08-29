@@ -1,23 +1,26 @@
 package za.ac.cput.util;
 
+import java.util.List;
+
 public class Helper {
-    public static boolean isNullOrEmpty(String s){
-        if(s == null || s.isEmpty()) {
+    public static boolean isNullOrEmpty(String s) {
+        if (s == null || s.isEmpty()) {
             return true;
         }
         return false;
     }
 
-    public static boolean intIsNull(int i){
-        if(i<=0){
+    public static boolean intIsNull(int i) {
+        if (i <= 0) {
             return true;
         }
         return false;
     }
 
-    public static boolean isValidEmail(String email){
-        //todo
-        return true;
+    public static boolean isValidEmail(String email) {
+        if (isNullOrEmpty(email)) return false;
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        return email.matches(emailRegex);
     }
 
     public static boolean doubleIsInvalid(double value) {
@@ -25,7 +28,7 @@ public class Helper {
     }
 
     public static boolean isAngleValid(double angle) {
-        return !(angle >= -360) || !(angle <= 360);
+        return angle >= -360 && angle <= 360; // Fixed logic
     }
 
     public static boolean areAllObjectsNotNull(Object... objects) {
@@ -35,5 +38,8 @@ public class Helper {
         return true;
     }
 
-
+    // New method for List validation
+    public static boolean isListNullOrEmpty(List<?> list) {
+        return list == null || list.isEmpty();
+    }
 }

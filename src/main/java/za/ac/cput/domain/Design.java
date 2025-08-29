@@ -1,10 +1,19 @@
 package za.ac.cput.domain;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "designs")
 public class Design {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "design_id")
     private int designId;
+
+    @Column(name = "file_path", nullable = false, length = 255)
     private String filePath;
 
-    private Design() {}
+    protected Design() {}
 
     private Design(Builder builder) {
         this.designId = builder.designId;

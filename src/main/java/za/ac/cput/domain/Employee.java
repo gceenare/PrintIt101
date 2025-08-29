@@ -25,7 +25,7 @@ public class Employee extends User {
         return position;
     }
 
-    public double getstaffDiscount() {
+    public double getStaffDiscount() {
         return staffDiscount;
     }
 
@@ -37,7 +37,7 @@ public class Employee extends User {
                 "} " + super.toString();
     }
 
-    public static class Builder extends User.Builder {
+    public static class Builder extends User.Builder<Builder> {
         private String position;
         private double staffDiscount;
 
@@ -52,50 +52,7 @@ public class Employee extends User {
         }
 
         @Override
-        public Builder setUserId(int userId) {
-            super.setUserId(userId);
-            return this;
-        }
-
-        @Override
-        public Builder setAddressId(int addressId) {
-            super.setAddressId(addressId);
-            return this;
-        }
-
-        @Override
-        public Builder setContactId(int contactId) {
-            super.setContactId(contactId);
-            return this;
-        }
-
-        @Override
-        public Builder setFirstName(String firstName) {
-            super.setFirstName(firstName);
-            return this;
-        }
-
-        @Override
-        public Builder setLastName(String lastName) {
-            super.setLastName(lastName);
-            return this;
-        }
-
-        @Override
-        public Builder setUserName(String userName) {
-            super.setUserName(userName);
-            return this;
-        }
-
-        @Override
-        public Builder setPassword(String password) {
-            super.setPassword(password);
-            return this;
-        }
-
-        @Override
-        public Builder setRole(String role) {
-            super.setRole(role);
+        protected Builder self() {
             return this;
         }
 
