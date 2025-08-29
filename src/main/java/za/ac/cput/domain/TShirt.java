@@ -1,13 +1,27 @@
 package za.ac.cput.domain;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "tshirts")
+@PrimaryKeyJoinColumn(name = "product_id")
 public class TShirt extends Product {
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
+
+    @Column(name = "description", length = 500)
     private String description;
+
+    @Column(name = "price", nullable = false)
     private double price;
+
+    @Column(name = "color", nullable = false, length = 50)
     private String color;
+
+    @Column(name = "size", nullable = false, length = 10)
     private String size;
 
-    private TShirt() {}
+    protected TShirt() {}
 
     private TShirt(Builder builder) {
         this.productId = builder.productId;
