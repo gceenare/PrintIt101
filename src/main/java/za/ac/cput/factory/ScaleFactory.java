@@ -1,7 +1,7 @@
 /* ScaleFactory.java
    Scale Factory class
    Author: Siyabulela Mgijima (230680305)
-   Date: 18 May 2025 */
+   Date: 28 August 2025 */
 package za.ac.cput.factory;
 
 import za.ac.cput.domain.Scale;

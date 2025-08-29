@@ -1,5 +1,5 @@
-/* PositionFactory.java
-   Position Factory class
+/* PositionFactoryTest.java
+   Position Factory Test class
    Author: Siyabulela Mgijima (230680305)
    Date: 18 May 2025 */
 package za.ac.cput.factory;
@@ -13,14 +13,20 @@ class PositionFactoryTest {
 
     @Test
     public void testCreateValidPosition() {
-        Position position = PositionFactory.createPosition(1.0, 2.5, -3.3);
+        Position position = PositionFactory.createPosition(1.0, 2.5, 3.3);
         assertNotNull(position);
         System.out.println("Valid Position:\n" + position);
     }
 
     @Test
-    public void testCreatePositionWithZeros() {
+    public void testInvalidPositionNegativeValues() {
+        Position position = PositionFactory.createPosition(-9.0, -21.0, -38.0);
+        assertNull(position);
+    }
+
+    @Test
+    public void testInvalidPositionZeroValues() {
         Position position = PositionFactory.createPosition(0.0, 0.0, 0.0);
-        assertNotNull(position);
+        assertNull(position);
     }
 }

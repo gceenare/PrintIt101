@@ -1,5 +1,5 @@
-/* PositionFactory.java
-   Position Factory class
+/* RotationFactoryTest.java
+   Rotation Factory Test class
    Author: Siyabulela Mgijima (230680305)
    Date: 18 May 2025 */
 package za.ac.cput.factory;

@@ -1,17 +1,35 @@
 /* PlacementData.java
    PlacementData POJO class
    Author: Siyabulela Mgijima (230680305)
-   Date: 11 May 2025 */
+   Date: 28 August 2025
+*/
 package za.ac.cput.domain;
 
+import jakarta.persistence.*;
+import java.util.Objects;
+
+@Entity
+@Table(name = "placement_data")
 public class PlacementData {
-    protected int placementDataId;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Integer placementDataId;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "position_id")
     protected Position position;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "rotation_id")
     protected Rotation rotation;
-    protected Scale scale;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "scale_id")
+    private Scale scale;
 
-    private PlacementData() {
+    protected PlacementData() {
+        // JPA requires a default constructor
     }
 
     private PlacementData(Builder builder) {
@@ -21,7 +39,7 @@ public class PlacementData {
         this.scale = builder.scale;
     }
 
-    public int getPlacementDataId() {
+    public Integer getPlacementDataId() {
         return placementDataId;
     }
 
@@ -37,7 +55,6 @@ public class PlacementData {
         return scale;
     }
 
-
     @Override
     public String toString() {
         return "PlacementData{" +
@@ -48,14 +65,26 @@ public class PlacementData {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PlacementData)) return false;
+        PlacementData that = (PlacementData) o;
+        return Objects.equals(placementDataId, that.placementDataId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(placementDataId);
+    }
+
     public static class Builder {
-        protected int placementDataId;
+        private Integer placementDataId;
         protected Position position;
         protected Rotation rotation;
         protected Scale scale;
 
-
-        public Builder setPlacementDataId(int placementDataId) {
+        public Builder setPlacementDataId(Integer placementDataId) {
             this.placementDataId = placementDataId;
             return this;
         }
@@ -74,7 +103,6 @@ public class PlacementData {
             this.scale = scale;
             return this;
         }
-
 
         public Builder copy(PlacementData placementData) {
             this.placementDataId = placementData.placementDataId;
