@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tshirts")
-@PrimaryKeyJoinColumn(name = "product_id")
 public class TShirt extends Product {
+
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 
@@ -56,26 +56,26 @@ public class TShirt extends Product {
     }
 
     public static class Builder {
-        private int productId;
-        private int designId;
-        private int placementDataId;
+        private Integer productId;
+        private Integer designId;
+        private Integer placementDataId;
         private String name;
         private String description;
         private double price;
         private String color;
         private String size;
 
-        public Builder setProductId(int productId) {
+        public Builder setProductId(Integer productId) {
             this.productId = productId;
             return this;
         }
 
-        public Builder setDesignId(int designId) {
+        public Builder setDesignId(Integer designId) {
             this.designId = designId;
             return this;
         }
 
-        public Builder setPlacementDataId(int placementDataId) {
+        public Builder setPlacementDataId(Integer placementDataId) {
             this.placementDataId = placementDataId;
             return this;
         }
