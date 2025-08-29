@@ -1,32 +1,24 @@
+/*
+OrderItem.java
+OrderItem POJO class
+Author: L Mbangata (222558156)
+Date: 11 May 2025
+*/
 package za.ac.cput.domain;
-
 import jakarta.persistence.*;
-
-/* OrderItem.java
-   OrderItem POJO class
-   Author: L Mbangata (222558156)
-   Date: 11 May 2025 */
-
+import java.util.Objects;
 @Entity
 @Table(name = "order_items")
 public class OrderItem {
-
     @Id
-    @Column(name = "order_item_id", nullable = false)
-    protected int orderItemId;
-
-    @Column(name = "product_id", nullable = false)
-    protected int productId;
-
-    @Column(name = "quantity", nullable = false)
-    protected int quantity;
-
-    @Column(name = "price_per_unit", nullable = false)
-    protected double pricePerUnit;
-
-    @OneToOne
-    @JoinColumn(name = "order_id", nullable = false)
-    protected Order order;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int orderItemId;
+    private int productId;
+    private int quantity;
+    private double pricePerUnit;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id")
+    private Order order;
 
     protected OrderItem() {
     }
@@ -36,6 +28,7 @@ public class OrderItem {
         this.productId = builder.productId;
         this.quantity = builder.quantity;
         this.pricePerUnit = builder.pricePerUnit;
+        this.order = builder.order;
     }
 
     public int getOrderItemId() {
@@ -54,6 +47,10 @@ public class OrderItem {
         return pricePerUnit;
     }
 
+    public Order getOrder() {
+        return order;
+    }
+
     @Override
     public String toString() {
         return "OrderItem{" +
@@ -64,11 +61,25 @@ public class OrderItem {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderItem orderItem = (OrderItem) o;
+        return orderItemId == orderItem.orderItemId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(orderItemId);
+    }
+
     public static class Builder {
         private int orderItemId;
         private int productId;
         private int quantity;
         private double pricePerUnit;
+        private Order order;
 
         public Builder setOrderItemId(int orderItemId) {
             this.orderItemId = orderItemId;
@@ -90,11 +101,17 @@ public class OrderItem {
             return this;
         }
 
+        public Builder setOrder(Order order) {
+            this.order = order;
+            return this;
+        }
+
         public Builder copy(OrderItem orderItem) {
             this.orderItemId = orderItem.orderItemId;
             this.productId = orderItem.productId;
             this.quantity = orderItem.quantity;
             this.pricePerUnit = orderItem.pricePerUnit;
+            this.order = orderItem.order;
             return this;
         }
 

@@ -60,7 +60,8 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Integer> {
 
     List<OrderItem> findAllByOrderByPricePerUnitDesc();
 
-    List<OrderItem> findByOrder_OrderId(String orderId);
+    //List<OrderItem> findByOrder_OrderId(String orderId);
+    List<OrderItem> findByOrder_OrderId(int orderId);
 
     List<OrderItem> findByOrder_UserId(int userId);
 
