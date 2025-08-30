@@ -10,9 +10,9 @@ import za.ac.cput.util.Helper;
 public class RotationFactory {
 
     public static Rotation createRotation(double x, double y, double z) {
-        if (Helper.isAngleValid(x) ||
-                Helper.isAngleValid(y) ||
-                Helper.isAngleValid(z)) {
+        if (!Helper.isAngleValid(x) ||
+                !Helper.isAngleValid(y) ||
+                !Helper.isAngleValid(z)) {
             return null;
         }
 
