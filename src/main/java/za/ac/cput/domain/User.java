@@ -64,6 +64,9 @@ public abstract class User {
         return userId;
     }
 
+    public Object getPassword() { return password;
+    }
+
     // Generic Builder
     public static abstract class Builder<T extends Builder<T>> {
         private int userId;
