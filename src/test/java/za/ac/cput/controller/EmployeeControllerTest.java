@@ -144,7 +144,6 @@ class EmployeeControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/employees/{id}", saved.getUserId()))
                 .andExpect(status().isNoContent());
 
-        // Verify deletion
         mockMvc.perform(get("/api/employees/{id}", saved.getUserId()))
                 .andExpect(status().isNotFound());
 
@@ -239,7 +238,6 @@ class EmployeeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("true"));
 
-        // Test non-existent username
         mockMvc.perform(get("/api/employees/exists/{userName}", "nonexistent"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("false"));
@@ -253,7 +251,7 @@ class EmployeeControllerTest {
     void createInvalidEmployee() throws Exception {
         Employee invalidEmployee = EmployeeFactory.createEmployee(
                 sampleAddress(), sampleContact(),
-                "", "Smith", // Empty first name
+                "", "Smith",
                 "Manager", 15.0, "janeS" + System.nanoTime(), "pass456", "Employee"
         );
 
@@ -282,7 +280,7 @@ class EmployeeControllerTest {
         Employee invalidEmployee = EmployeeFactory.createEmployee(
                 sampleAddress(), sampleContact(),
                 "Jane", "Smith",
-                "", 15.0, "janeS" + System.nanoTime(), "pass456", "Employee" // Empty position
+                "", 15.0, "janeS" + System.nanoTime(), "pass456", "Employee"
         );
 
         String invalidEmployeeJson = objectMapper.writeValueAsString(invalidEmployee);
@@ -301,7 +299,7 @@ class EmployeeControllerTest {
         Employee invalidEmployee = EmployeeFactory.createEmployee(
                 sampleAddress(), sampleContact(),
                 "Jane", "Smith",
-                "Manager", -5.0, "janeS" + System.nanoTime(), "pass456", "Employee" // Negative discount
+                "Manager", -5.0, "janeS" + System.nanoTime(), "pass456", "Employee"
         );
 
         String invalidEmployeeJson = objectMapper.writeValueAsString(invalidEmployee);

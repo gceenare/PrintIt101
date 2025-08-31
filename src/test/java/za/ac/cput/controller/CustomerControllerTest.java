@@ -138,7 +138,6 @@ class CustomerControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/customers/{id}", saved.getUserId()))
                 .andExpect(status().isNoContent());
 
-        // Verify deletion
         mockMvc.perform(get("/api/customers/{id}", saved.getUserId()))
                 .andExpect(status().isNotFound());
 
@@ -187,7 +186,7 @@ class CustomerControllerTest {
     @Test
     @Order(8)
     void findByUserName() throws Exception {
-        // Create a customer with unique username for this test
+
         Customer uniqueCustomer = CustomerFactory.createCustomer(
                 sampleAddress(), sampleContact(),
                 "John", "Doe",
@@ -206,7 +205,7 @@ class CustomerControllerTest {
     @Test
     @Order(9)
     void existsByUserName() throws Exception {
-        // Create a customer with unique username for this test
+
         Customer uniqueCustomer = CustomerFactory.createCustomer(
                 sampleAddress(), sampleContact(),
                 "John", "Doe",
@@ -218,7 +217,6 @@ class CustomerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("true"));
 
-        // Test non-existent username
         mockMvc.perform(get("/api/customers/exists/{userName}", "nonexistent"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("false"));
@@ -232,7 +230,7 @@ class CustomerControllerTest {
     void createInvalidCustomer() throws Exception {
         Customer invalidCustomer = CustomerFactory.createCustomer(
                 sampleAddress(), sampleContact(),
-                "", "Doe", // Empty first name
+                "", "Doe",
                 10.0, "johnD", "pass123", "Customer"
         );
 
