@@ -43,18 +43,4 @@ public class DesignController {
         return service.getAll();
     }
 
-    @GetMapping("/findByName/{name}")
-    public List<Design> findByName(@PathVariable String name) {
-        return service.findByName(name);
-    }
-
-    @GetMapping("/findByCategory/{category}")
-    public List<Design> findByCategory(@PathVariable String category) {
-        return service.findByCategory(category);
-    }
-
-    @GetMapping("/findByDesigner/{designer}")
-    public List<Design> findByDesigner(@PathVariable String designer) {
-        return service.findByDesigner(designer);
-    }
 }

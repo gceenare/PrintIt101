@@ -53,8 +53,4 @@ public class TShirtController {
         return service.findByColor(color);
     }
 
-    @GetMapping("/findByBrand/{brand}")
-    public List<TShirt> findByBrand(@PathVariable String brand) {
-        return service.findByBrand(brand);
-    }
 }
