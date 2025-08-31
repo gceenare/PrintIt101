@@ -1,5 +1,7 @@
 package za.ac.cput.util;
 
+import java.util.List;
+
 public class Helper {
     public static boolean isNullOrEmpty(String s) {
         if (s == null || s.isEmpty()) {
@@ -34,5 +36,10 @@ public class Helper {
             if (obj == null) return false;
         }
         return true;
+    }
+
+    // New method for List validation
+    public static boolean isListNullOrEmpty(List<?> list) {
+        return list == null || list.isEmpty();
     }
 }
