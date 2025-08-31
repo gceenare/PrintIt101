@@ -54,10 +54,12 @@ class EmployeeServiceTest {
 
     @BeforeEach
     void setUp() {
+        // Use timestamp to ensure unique username for each test run
+        String uniqueUsername = "janeS" + System.currentTimeMillis();
         employee = EmployeeFactory.createEmployee(
                 sampleAddress(), sampleContact(),
                 "Jane", "Smith",
-                "Manager", 15.0, "janeS", "pass456", "Employee"
+                "Manager", 15.0, uniqueUsername, "pass456", "Employee"
         );
     }
 
@@ -68,7 +70,7 @@ class EmployeeServiceTest {
         assertNotNull(saved);
         assertEquals("Jane", saved.getFirstName());
         assertEquals("Smith", saved.getLastName());
-        assertEquals("janeS", saved.getUserName());
+        assertEquals(employee.getUserName(), saved.getUserName());
         assertEquals("Manager", saved.getPosition());
         assertEquals(15.0, saved.getStaffDiscount());
         assertTrue(saved.getUserId() > 0);
@@ -162,10 +164,10 @@ class EmployeeServiceTest {
     @Test
     @Order(9)
     void findByUserName() {
-        employeeRepository.save(employee);
-        Employee found = employeeService.findByUserName("janeS");
+        Employee saved = employeeRepository.save(employee);
+        Employee found = employeeService.findByUserName(saved.getUserName());
         assertNotNull(found);
-        assertEquals("janeS", found.getUserName());
+        assertEquals(saved.getUserName(), found.getUserName());
         assertEquals("Jane", found.getFirstName());
         System.out.println("Found by Username: " + found);
     }
@@ -173,8 +175,8 @@ class EmployeeServiceTest {
     @Test
     @Order(10)
     void existsByUserName() {
-        employeeRepository.save(employee);
-        boolean exists = employeeService.existsByUserName("janeS");
+        Employee saved = employeeRepository.save(employee);
+        boolean exists = employeeService.existsByUserName(saved.getUserName());
         assertTrue(exists);
 
         boolean notExists = employeeService.existsByUserName("nonexistentUser");
