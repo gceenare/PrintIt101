@@ -35,29 +35,31 @@ class CustomerServiceTest {
 
     private Address sampleAddress() {
         return new Address.Builder()
-                .setBuildingName("Sunset Apartments")
-                .setPropertyNumber(123)
-                .setStreet("Main St")
+                .setBuildingName("City Apartments")
+                .setPropertyNumber(456)
+                .setStreet("Oak St")
                 .setMunicipality("Cape Town")
                 .setProvince("Western Cape")
-                .setPostalCode("8000")
+                .setPostalCode("8001")
                 .setCountry("South Africa")
                 .build();
     }
 
     private Contact sampleContact() {
         return new Contact.Builder()
-                .setPhoneNumber("0211234567")
+                .setPhoneNumber("0219876543")
                 .setEmail("john@example.com")
                 .build();
     }
 
     @BeforeEach
     void setUp() {
+        // Use timestamp to ensure unique username for each test run
+        String uniqueUsername = "johnD" + System.currentTimeMillis();
         customer = CustomerFactory.createCustomer(
                 sampleAddress(), sampleContact(),
                 "John", "Doe",
-                10.0, "johnD", "pass123", "Customer"
+                10.0, uniqueUsername, "pass123", "Customer"
         );
     }
 
@@ -68,7 +70,7 @@ class CustomerServiceTest {
         assertNotNull(saved);
         assertEquals("John", saved.getFirstName());
         assertEquals("Doe", saved.getLastName());
-        assertEquals("johnD", saved.getUserName());
+        assertEquals(customer.getUserName(), saved.getUserName());
         assertEquals(10.0, saved.getCustomerDiscount());
         assertTrue(saved.getUserId() > 0);
         System.out.println("Created Customer: " + saved);
@@ -149,10 +151,10 @@ class CustomerServiceTest {
     @Test
     @Order(8)
     void findByUserName() {
-        customerRepository.save(customer);
-        Customer found = customerService.findByUserName("johnD");
+        Customer saved = customerRepository.save(customer);
+        Customer found = customerService.findByUserName(saved.getUserName());
         assertNotNull(found);
-        assertEquals("johnD", found.getUserName());
+        assertEquals(saved.getUserName(), found.getUserName());
         assertEquals("John", found.getFirstName());
         System.out.println("Found by Username: " + found);
     }
@@ -160,8 +162,8 @@ class CustomerServiceTest {
     @Test
     @Order(9)
     void existsByUserName() {
-        customerRepository.save(customer);
-        boolean exists = customerService.existsByUserName("johnD");
+        Customer saved = customerRepository.save(customer);
+        boolean exists = customerService.existsByUserName(saved.getUserName());
         assertTrue(exists);
 
         boolean notExists = customerService.existsByUserName("nonexistentUser");
