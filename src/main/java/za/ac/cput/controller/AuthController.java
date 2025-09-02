@@ -13,8 +13,7 @@ import za.ac.cput.service.CustomerService;
 import za.ac.cput.util.ErrorResponse;
 
 @RestController
-@RequestMapping("/api/auth")
-@CrossOrigin(origins = "*")
+@RequestMapping("/auth")
 public class AuthController {
 
     @Autowired

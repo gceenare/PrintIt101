@@ -19,7 +19,7 @@ public class AddressFactory {
     }
 
     public static Address createResidentialAddress(int propertyNumber, String buildingName, int unitNumber, String street, String municipality, String province, String postalCode, String country) {
-        if (Helper.intIsNull(propertyNumber) || Helper.isNullOrEmpty(street) || Helper.isNullOrEmpty(municipality) || Helper.isNullOrEmpty(province) || Helper.isNullOrEmpty(postalCode) || Helper.isNullOrEmpty(country)) {
+        if (Helper.isNullOrEmpty(street) || Helper.isNullOrEmpty(municipality) || Helper.isNullOrEmpty(province) || Helper.isNullOrEmpty(postalCode) || Helper.isNullOrEmpty(country)) {
             return null;
         }
         return new Address.Builder()
