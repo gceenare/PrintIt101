@@ -35,17 +35,17 @@ public abstract class User {
         this.role = builder.role;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId=" + userId +
-                ", address=" + address +
-                ", contact=" + contact +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", userName='" + userName + '\'' +
-                ", role='" + role + '\'' +
-                '}';
+    // Add getters
+    public int getUserId() {
+        return userId;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public Contact getContact() {
+        return contact;
     }
 
     public String getFirstName() {
@@ -60,11 +60,25 @@ public abstract class User {
         return userName;
     }
 
-    public int getUserId() {
-        return userId;
+    public String getPassword() {
+        return password;
     }
 
-    public Object getPassword() { return password;
+    public String getRole() {
+        return role;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", address=" + address +
+                ", contact=" + contact +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", userName='" + userName + '\'' +
+                ", role='" + role + '\'' +
+                '}';
     }
 
     // Generic Builder

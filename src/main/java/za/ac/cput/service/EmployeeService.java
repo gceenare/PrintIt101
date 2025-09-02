@@ -1,8 +1,14 @@
 package za.ac.cput.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import za.ac.cput.domain.Address;
+import za.ac.cput.domain.Contact;
 import za.ac.cput.domain.Employee;
+import za.ac.cput.factory.AddressFactory;
+import za.ac.cput.factory.ContactFactory;
+import za.ac.cput.factory.EmployeeFactory;
 import za.ac.cput.repository.EmployeeRepository;
 
 import java.util.List;
@@ -10,7 +16,7 @@ import java.util.List;
 @Service
 public class EmployeeService implements IEmployeeService {
 
-    private EmployeeRepository repository;
+    private final EmployeeRepository repository;
 
     @Autowired
     public EmployeeService(EmployeeRepository repository) {
@@ -18,8 +24,54 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
+    @Transactional
     public Employee create(Employee employee) {
-        return repository.save(employee);
+        // Validate that employee and its address/contact are not null
+        if (employee == null || employee.getAddress() == null || employee.getContact() == null) {
+            throw new IllegalArgumentException("Employee, address, or contact cannot be null");
+        }
+
+        // Create Address using factory
+        Address address = AddressFactory.createResidentialAddress(
+                employee.getAddress().getPropertyNumber(),
+                employee.getAddress().getBuildingName(),
+                employee.getAddress().getUnitNumber(),
+                employee.getAddress().getStreet(),
+                employee.getAddress().getMunicipality(),
+                employee.getAddress().getProvince(),
+                employee.getAddress().getPostalCode(),
+                employee.getAddress().getCountry()
+        );
+
+        // Create Contact using factory
+        Contact contact = ContactFactory.createContact(
+                employee.getContact().getPhoneNumber(),
+                employee.getContact().getEmail()
+        );
+
+        // Validate factory output
+        if (address == null || contact == null) {
+            throw new IllegalArgumentException("Invalid address or contact data");
+        }
+
+        // Create Employee using factory
+        Employee validatedEmployee = EmployeeFactory.createEmployee(
+                address,
+                contact,
+                employee.getFirstName(),
+                employee.getLastName(),
+                employee.getPosition(),
+                employee.getStaffDiscount(),
+                employee.getUserName(),
+                employee.getPassword(),
+                "EMPLOYEE"
+        );
+
+        if (validatedEmployee == null) {
+            throw new IllegalArgumentException("Invalid employee data");
+        }
+
+        return repository.save(validatedEmployee);
     }
 
     @Override
@@ -29,13 +81,19 @@ public class EmployeeService implements IEmployeeService {
 
     @Override
     public Employee update(Employee employee) {
-        return repository.save(employee);
+        if (repository.existsById(employee.getUserId())) {
+            return repository.save(employee);
+        }
+        return null;
     }
 
     @Override
     public boolean delete(Integer id) {
-        repository.deleteById(id);
-        return true;
+        if (repository.existsById(id)) {
+            repository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
     @Override

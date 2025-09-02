@@ -10,8 +10,8 @@ import za.ac.cput.service.CustomerService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/customers")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/customer") // Align with frontend
+@CrossOrigin(origins = "*") // Re-enable for frontend access
 public class CustomerController {
 
     private final CustomerService customerService;
@@ -25,9 +25,17 @@ public class CustomerController {
     public ResponseEntity<Customer> create(@RequestBody Customer customer) {
         try {
             Customer created = customerService.create(customer);
+            if (created == null) {
+                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            }
             return new ResponseEntity<>(created, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            System.err.println("Validation error: " + e.getMessage());
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            System.err.println("Error creating customer: " + e.getMessage());
+            e.printStackTrace();
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -44,8 +52,12 @@ public class CustomerController {
     public ResponseEntity<Customer> update(@RequestBody Customer customer) {
         try {
             Customer updated = customerService.update(customer);
-            return new ResponseEntity<>(updated, HttpStatus.OK);
+            if (updated != null) {
+                return new ResponseEntity<>(updated, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
+            System.err.println("Error updating customer: " + e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

@@ -10,7 +10,7 @@ import za.ac.cput.service.EmployeeService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/employees")
+@RequestMapping("/api/employee")
 @CrossOrigin(origins = "*")
 public class EmployeeController {
 
@@ -25,9 +25,17 @@ public class EmployeeController {
     public ResponseEntity<Employee> create(@RequestBody Employee employee) {
         try {
             Employee created = employeeService.create(employee);
+            if (created == null) {
+                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            }
             return new ResponseEntity<>(created, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            System.err.println("Validation error: " + e.getMessage());
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            System.err.println("Error creating employee: " + e.getMessage());
+            e.printStackTrace();
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
