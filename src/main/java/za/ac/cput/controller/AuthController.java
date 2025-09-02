@@ -24,8 +24,7 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
             Customer customer = customerService.findByUserName(loginRequest.getUserName());
-            // Note: Password comparison needs proper implementation - currently cannot access password field
-            if (customer != null) {
+            if (customer != null && customer.getPassword().equals(loginRequest.getPassword())) {
                 return ResponseEntity.ok(customer);
             }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -39,43 +38,43 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
 
-            if (customerService.existsByUserName(registerRequest.getUserName())) {
-                return ResponseEntity.status(HttpStatus.CONFLICT)
-                        .body(new ErrorResponse("Username already exists"));
-            }
+        if (customerService.existsByUserName(registerRequest.getUserName())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new ErrorResponse("Username already exists"));
+        }
 
-            Contact contact = ContactFactory.createContact(
-                    registerRequest.getContact().getPhone(),
-                    registerRequest.getContact().getEmail()
-            );
+        Contact contact = ContactFactory.createContact(
+                registerRequest.getContact().getPhone(),
+                registerRequest.getContact().getEmail()
+        );
 
-            Address address = new Address.Builder()
-                    .setPropertyNumber(123)
-                    .setStreet(registerRequest.getAddress().getStreet())
-                    .setMunicipality(registerRequest.getAddress().getMunicipality())
-                    .setProvince(registerRequest.getAddress().getProvince())
-                    .setPostalCode(registerRequest.getAddress().getPostalCode())
-                    .setCountry(registerRequest.getAddress().getCountry())
-                    .build();
+        Address address = new Address.Builder()
+                .setPropertyNumber(123)
+                .setStreet(registerRequest.getAddress().getStreet())
+                .setMunicipality(registerRequest.getAddress().getMunicipality())
+                .setProvince(registerRequest.getAddress().getProvince())
+                .setPostalCode(registerRequest.getAddress().getPostalCode())
+                .setCountry(registerRequest.getAddress().getCountry())
+                .build();
 
-            Customer newCustomer = CustomerFactory.createCustomer(
-                    address,
-                    contact,
-                    registerRequest.getFirstName(),
-                    registerRequest.getLastName(),
-                    0.1,
-                    registerRequest.getUserName(),
-                    registerRequest.getPassword(),
-                    "CUSTOMER"
-            );
+        Customer newCustomer = CustomerFactory.createCustomer(
+                address,
+                contact,
+                registerRequest.getFirstName(),
+                registerRequest.getLastName(),
+                0.1,
+                registerRequest.getUserName(),
+                registerRequest.getPassword(),
+                "CUSTOMER"
+        );
 
-            if (newCustomer == null) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(new ErrorResponse("Failed to create customer entity"));
-            }
+        if (newCustomer == null) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse("Failed to create customer entity"));
+        }
 
-            Customer savedCustomer = customerService.create(newCustomer);
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedCustomer);
+        Customer savedCustomer = customerService.create(newCustomer);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedCustomer);
 
     }
 
