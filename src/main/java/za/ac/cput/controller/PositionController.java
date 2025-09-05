@@ -7,6 +7,7 @@
 package za.ac.cput.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.Position;
 import za.ac.cput.service.PositionService;
@@ -30,8 +31,12 @@ public class PositionController {
     }
 
     @GetMapping("/read/{id}")
-    public Position read(@PathVariable Integer id) {
-        return service.read(id);
+    public ResponseEntity<Position> read(@PathVariable("id") Integer id) {
+        Position position = service.read(id);
+        if (position == null) {
+            return ResponseEntity.notFound().build(); // 404
+        }
+        return ResponseEntity.ok(position); // 200
     }
 
     @PutMapping("/update")

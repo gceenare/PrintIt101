@@ -7,6 +7,7 @@
 package za.ac.cput.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.Rotation;
 import za.ac.cput.service.RotationService;
@@ -30,8 +31,12 @@ public class RotationController {
     }
 
     @GetMapping("/read/{id}")
-    public Rotation read(@PathVariable Integer id) {
-        return service.read(id);
+    public ResponseEntity<Rotation> read(@PathVariable("id") Integer id) {
+        Rotation rotation = service.read(id);
+        if (rotation == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(rotation);
     }
 
     @PutMapping("/update")
