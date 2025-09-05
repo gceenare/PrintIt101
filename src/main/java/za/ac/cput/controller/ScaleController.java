@@ -7,6 +7,7 @@
 package za.ac.cput.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.Scale;
 import za.ac.cput.service.ScaleService;
@@ -30,8 +31,12 @@ public class ScaleController {
     }
 
     @GetMapping("/read/{id}")
-    public Scale read(@PathVariable Integer id) {
-        return service.read(id);
+    public ResponseEntity<Scale> read(@PathVariable("id") Integer id) {
+        Scale scale = service.read(id);
+        if (scale == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(scale);
     }
 
     @PutMapping("/update")
