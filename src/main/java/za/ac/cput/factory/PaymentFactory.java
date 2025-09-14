@@ -2,20 +2,19 @@ package za.ac.cput.factory;
 
 import za.ac.cput.domain.Payment;
 import za.ac.cput.domain.paymentMethod;
+import java.time.LocalDate;
 
 public class PaymentFactory {
 
-
-    public static Payment createPayment(int paymentId, double amount, paymentMethod payment, String paymentDate, String paymentStatus) {
-        if (amount <= 0 || payment == null || paymentId <= 0) {
+    public static Payment createPayment(double amount, paymentMethod paymentMethod, String paymentStatus) {
+        if (amount <= 0 || paymentMethod == null) {
             return null;
         }
         return new Payment.Builder()
-                .setPaymentId(paymentId)
                 .setAmount(amount)
-                .setPaymentMethod(payment)
-                .setPaymentDate(java.time.LocalDate.now().toString())
-                .setPaymentStatus(paymentStatus)
+                .setPaymentMethod(paymentMethod)
+                .setPaymentDate(LocalDate.now().toString())
+                .setPaymentStatus(paymentStatus == null ? "PENDING" : paymentStatus)
                 .build();
     }
 }
