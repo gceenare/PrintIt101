@@ -1,23 +1,27 @@
 package za.ac.cput.domain;
 
-/* Paymeny.java
+import jakarta.persistence.*;
+import java.io.Serializable;
 
-     Payment POJO class
+@Entity
+@Table(name = "payments")
+public class Payment implements Serializable {
 
-     Author: G Mbabe (222836040)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer paymentId;
 
-     Date: 11 May 2025 */
+    private double amount;
 
-public class Payment {
+    @Enumerated(EnumType.STRING)
+    private paymentMethod paymentMethod;
 
-    protected int paymentId;
-    protected double amount;
-    protected paymentMethod paymentMethod;
-    protected String paymentDate;
+    private String paymentDate;
+
     private String paymentStatus;
 
-    private Payment() {
-    }
+    public Payment() { }
+
     private Payment(Builder builder) {
         this.paymentId = builder.paymentId;
         this.amount = builder.amount;
@@ -25,21 +29,14 @@ public class Payment {
         this.paymentDate = builder.paymentDate;
         this.paymentStatus = builder.paymentStatus;
     }
-    public int getPaymentId() {
-        return paymentId;
-    }
-    public double getAmount() {
-        return amount;
-    }
-    public paymentMethod getPaymentMethod() {
-        return paymentMethod;
-    }
-    public String getPaymentDate() {
-        return paymentDate;
-    }
-    public String getPaymentStatus() {
-        return paymentStatus;
-    }
+
+    // Getters
+    public Integer getPaymentId() { return paymentId; }
+    public double getAmount() { return amount; }
+    public paymentMethod getPaymentMethod() { return paymentMethod; }
+    public String getPaymentDate() { return paymentDate; }
+    public String getPaymentStatus() { return paymentStatus; }
+
     @Override
     public String toString() {
         return "Payment{" +
@@ -52,13 +49,13 @@ public class Payment {
     }
 
     public static class Builder {
-        private int paymentId;
+        private Integer paymentId;
         private double amount;
         private paymentMethod paymentMethod;
         private String paymentDate;
         private String paymentStatus;
 
-        public Builder setPaymentId(int paymentId) {
+        public Builder setPaymentId(Integer paymentId) {
             this.paymentId = paymentId;
             return this;
         }
