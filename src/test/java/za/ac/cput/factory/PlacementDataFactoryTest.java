@@ -16,9 +16,9 @@ class PlacementDataFactoryTest {
 
     @Test
     public void testCreateValidPlacementData() {
-        Position position = PositionFactory.createPosition(23.0, 19.0, 3.0);
-        Rotation rotation = RotationFactory.createRotation(0.0, 90.0, 240.0);
-        Scale scale = ScaleFactory.createScale(10.0, 5.0, 12.0);
+        Position position = PositionFactory.createPosition(23.0, 19.0);
+        Rotation rotation = RotationFactory.createRotation(90.0);
+        Scale scale = ScaleFactory.createScale(10.0);
 
         PlacementData placementData = PlacementDataFactory.createPlacementData(position, rotation, scale);
         assertNotNull(placementData);
@@ -27,8 +27,8 @@ class PlacementDataFactoryTest {
 
     @Test
     public void testCreatePlacementDataWithNullScale() {
-        Position position = PositionFactory.createPosition(76.0, 21.0, 11.0);
-        Rotation rotation = RotationFactory.createRotation(59.0, 72.0, 180.0);
+        Position position = PositionFactory.createPosition(76.0, 21.0);
+        Rotation rotation = RotationFactory.createRotation(59.0);
         Scale scale = null;
 
         PlacementData placementData = PlacementDataFactory.createPlacementData(position, rotation, scale);

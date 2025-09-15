@@ -17,7 +17,6 @@ public class Position {
 
     private double x;
     private double y;
-    private double z;
 
     protected Position() {
     }
@@ -26,7 +25,6 @@ public class Position {
         this.positionId = builder.positionId;
         this.x = builder.x;
         this.y = builder.y;
-        this.z = builder.z;
     }
 
     public int getPositionId() {
@@ -41,9 +39,6 @@ public class Position {
         return y;
     }
 
-    public double getZ() {
-        return z;
-    }
 
     @Override
     public String toString() {
@@ -51,7 +46,6 @@ public class Position {
                 "positionId=" + positionId +
                 ", x=" + x +
                 ", y=" + y +
-                ", z=" + z +
                 '}';
     }
 
@@ -62,20 +56,18 @@ public class Position {
         Position position = (Position) o;
         return positionId == position.positionId &&
                 Double.compare(position.x, x) == 0 &&
-                Double.compare(position.y, y) == 0 &&
-                Double.compare(position.z, z) == 0;
+                Double.compare(position.y, y) == 0;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(positionId, x, y, z);
+        return Objects.hash(positionId, x, y);
     }
 
     public static class Builder {
         private int positionId;
         private double x;
         private double y;
-        private double z;
 
         public Builder setPositionId(int positionId) {
             this.positionId = positionId;
@@ -92,16 +84,10 @@ public class Position {
             return this;
         }
 
-        public Builder setZ(double z) {
-            this.z = z;
-            return this;
-        }
-
         public Builder copy(Position position) {
             this.positionId = position.positionId;
             this.x = position.x;
             this.y = position.y;
-            this.z = position.z;
             return this;
         }
 

@@ -1,7 +1,7 @@
 /* RotationService.java
    Rotation Service
    Author: Siyabulela Mgijima (230680305)
-   Date: 28 August 2025
+   Updated: 14 September 2025
 */
 package za.ac.cput.service;
 
@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import za.ac.cput.domain.Rotation;
 import za.ac.cput.repository.RotationRepository;
+import za.ac.cput.util.Helper;
 
 import java.util.List;
 
@@ -24,6 +25,9 @@ public class RotationService implements IRotationService {
 
     @Override
     public Rotation create(Rotation rotation) {
+        if (rotation == null || !Helper.isAngleValid(rotation.getAngle())) {
+            throw new IllegalArgumentException("Invalid rotation angle: " + (rotation != null ? rotation.getAngle() : "null"));
+        }
         return repository.save(rotation);
     }
 
@@ -34,6 +38,9 @@ public class RotationService implements IRotationService {
 
     @Override
     public Rotation update(Rotation rotation) {
+        if (rotation == null || !Helper.isAngleValid(rotation.getAngle())) {
+            throw new IllegalArgumentException("Invalid rotation angle: " + (rotation != null ? rotation.getAngle() : "null"));
+        }
         return repository.save(rotation);
     }
 
@@ -49,17 +56,7 @@ public class RotationService implements IRotationService {
     }
 
     @Override
-    public List<Rotation> findByX(double x) {
-        return repository.findByX(x);
-    }
-
-    @Override
-    public List<Rotation> findByY(double y) {
-        return repository.findByY(y);
-    }
-
-    @Override
-    public List<Rotation> findByZ(double z) {
-        return repository.findByZ(z);
+    public List<Rotation> findByAngle(double angle) {
+        return repository.findByAngle(angle);
     }
 }

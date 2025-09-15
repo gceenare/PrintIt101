@@ -1,8 +1,3 @@
-/* ScaleControllerTest.java
-   Test class for ScaleController
-   Author: Siyabulela Mgijima (230680305)
-   Date: 30 August 2025
-*/
 package za.ac.cput.controller;
 
 import org.junit.jupiter.api.Test;
@@ -30,14 +25,6 @@ class ScaleControllerTest {
     }
 
     @Test
-    void findByXValue() {
-    }
-
-    @Test
-    void findByYValue() {
-    }
-
-    @Test
-    void findByZValue() {
+    void findByValue() {
     }
 }

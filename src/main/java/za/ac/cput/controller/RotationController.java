@@ -49,19 +49,9 @@ public class RotationController {
         return service.delete(id);
     }
 
-    @GetMapping("/findByX/{x}")
-    public List<Rotation> findByX(@PathVariable double x) {
-        return service.findByX(x);
-    }
-
-    @GetMapping("/findByY/{y}")
-    public List<Rotation> findByY(@PathVariable double y) {
-        return service.findByY(y);
-    }
-
-    @GetMapping("/findByZ/{z}")
-    public List<Rotation> findByZ(@PathVariable double z) {
-        return service.findByZ(z);
+    @GetMapping("/findByAngle/{angle}")
+    public List<Rotation> findByAngle(@PathVariable double angle) {
+        return service.findByAngle(angle);
     }
 
     @GetMapping("/getAll")

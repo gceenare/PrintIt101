@@ -1,7 +1,8 @@
 /* IPositionService.java
-   IPosition Service
+   Position Service Interface
    Author: Siyabulela Mgijima (230680305)
-   Date: 28 August 2025 */
+   Date: 28 August 2025
+*/
 package za.ac.cput.service;
 
 import za.ac.cput.domain.Position;
@@ -11,5 +12,5 @@ public interface IPositionService extends IService<Position, Integer> {
     List<Position> getAll();
     List<Position> findByX(double x);
     List<Position> findByY(double y);
-    List<Position> findByZ(double z);
+    List<Position> findByXAndY(double x, double y);
 }

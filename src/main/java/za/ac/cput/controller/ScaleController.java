@@ -49,19 +49,9 @@ public class ScaleController {
         return service.delete(id);
     }
 
-    @GetMapping("/findByX/{x}")
-    public List<Scale> findByX(@PathVariable double x) {
-        return service.findByX(x);
-    }
-
-    @GetMapping("/findByY/{y}")
-    public List<Scale> findByY(@PathVariable double y) {
-        return service.findByY(y);
-    }
-
-    @GetMapping("/findByZ/{z}")
-    public List<Scale> findByZ(@PathVariable double z) {
-        return service.findByZ(z);
+    @GetMapping("/findByValue/{value}")
+    public List<Scale> findByValue(@PathVariable double value) {
+        return service.findByValue(value);
     }
 
     @GetMapping("/getAll")

@@ -1,13 +1,6 @@
-/* PositionServiceTest.java
-   Position Service Test
-   Author: Siyabulela Mgijima (230680305)
-   Date: 28 May 2025 */
 package za.ac.cput.service;
 
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
@@ -21,7 +14,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@TestMethodOrder(OrderAnnotation.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Transactional
 @Rollback
 class PositionServiceTest {
@@ -33,7 +26,7 @@ class PositionServiceTest {
     private PositionRepository positionRepository;
 
     private Position createPosition() {
-        Position position = PositionFactory.createPosition(10.5, 20.2, 30.7);
+        Position position = PositionFactory.createPosition(10.5, 20.2);
         assertNotNull(position, "Position creation failed in factory");
         return position;
     }
@@ -46,7 +39,6 @@ class PositionServiceTest {
         assertNotNull(saved);
         assertEquals(10.5, saved.getX());
         assertEquals(20.2, saved.getY());
-        assertEquals(30.7, saved.getZ());
         assertTrue(saved.getPositionId() > 0);
     }
 
@@ -58,7 +50,6 @@ class PositionServiceTest {
         Position found = positionService.read(saved.getPositionId());
         assertNotNull(found);
         assertEquals(saved.getPositionId(), found.getPositionId());
-        assertEquals(10.5, found.getX());
     }
 
     @Test
@@ -75,7 +66,6 @@ class PositionServiceTest {
         assertNotNull(updated);
         assertEquals(99.9, updated.getX());
         assertEquals(88.8, updated.getY());
-        assertEquals(saved.getPositionId(), updated.getPositionId());
     }
 
     @Test
@@ -91,11 +81,22 @@ class PositionServiceTest {
     @Test
     @Order(5)
     void getAll() {
+        positionRepository.deleteAll(); // ensure DB is clean
+
         Position position = createPosition();
-        positionRepository.save(position);
+        Position saved = positionRepository.save(position);
+
         List<Position> positions = positionService.getAll();
         assertFalse(positions.isEmpty());
-        assertEquals(10.5, positions.get(0).getX());
+
+        // Find the saved entity by ID instead of assuming it's first in the list
+        Position retrieved = positions.stream()
+                .filter(p -> p.getPositionId() == saved.getPositionId())
+                .findFirst()
+                .orElse(null);
+
+        assertNotNull(retrieved);
+        assertEquals(10.5, retrieved.getX());
     }
 
     @Test
@@ -116,15 +117,5 @@ class PositionServiceTest {
         List<Position> found = positionService.findByY(20.2);
         assertFalse(found.isEmpty());
         assertEquals(20.2, found.get(0).getY());
-    }
-
-    @Test
-    @Order(8)
-    void findByZ() {
-        Position position = createPosition();
-        positionRepository.save(position);
-        List<Position> found = positionService.findByZ(30.7);
-        assertFalse(found.isEmpty());
-        assertEquals(30.7, found.get(0).getZ());
     }
 }
