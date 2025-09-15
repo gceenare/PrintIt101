@@ -89,6 +89,11 @@ public class OrderController {
     public List<Order> findByOrderStatusIn(@RequestBody List<OrderStatus> orderStatuses) {
         return service.findByOrderStatusIn(orderStatuses);
     }
+    @PostMapping("/createWithItems")
+    public Order createWithItems(@RequestBody Order order) {
+        return service.create(order);
+    }
+
 
     @GetMapping("/findByOrderItems/productId/{productId}")
     public List<Order> findByOrderItemsProductId(@PathVariable int productId) {
