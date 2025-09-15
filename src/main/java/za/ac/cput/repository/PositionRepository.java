@@ -1,7 +1,8 @@
 /* PositionRepository.java
    Position Repository
    Author: Siyabulela Mgijima (230680305)
-   Date: 28 August 2025 */
+   Date: 28 August 2025
+*/
 package za.ac.cput.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,8 +18,5 @@ public interface PositionRepository extends JpaRepository<Position, Integer> {
 
     List<Position> findByX(double x);
     List<Position> findByY(double y);
-    List<Position> findByZ(double z);
+    List<Position> findByXAndY(double x, double y);
 }
-
-
-

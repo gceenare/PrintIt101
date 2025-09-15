@@ -1,7 +1,8 @@
 /* PositionService.java
    Position Service
    Author: Siyabulela Mgijima (230680305)
-   Date: 28 August 2025 */
+   Updated: 14 September 2025
+*/
 package za.ac.cput.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,8 +59,7 @@ public class PositionService implements IPositionService {
     }
 
     @Override
-    public List<Position> findByZ(double z) {
-        return repository.findByZ(z);
+    public List<Position> findByXAndY(double x, double y) {
+        return repository.findByXAndY(x, y);
     }
 }
-

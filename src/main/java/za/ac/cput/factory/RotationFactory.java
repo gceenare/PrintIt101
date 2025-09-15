@@ -9,17 +9,13 @@ import za.ac.cput.util.Helper;
 
 public class RotationFactory {
 
-    public static Rotation createRotation(double x, double y, double z) {
-        if (!Helper.isAngleValid(x) ||
-                !Helper.isAngleValid(y) ||
-                !Helper.isAngleValid(z)) {
+    public static Rotation createRotation(double angle) {
+        if (!Helper.isAngleValid(angle)) {
             return null;
         }
 
         return new Rotation.Builder()
-                .setX(x)
-                .setY(y)
-                .setZ(z)
+                .setAngle(angle)
                 .build();
     }
 }

@@ -1,7 +1,7 @@
 /* PositionController.java
    REST Controller for Position
    Author: Siyabulela Mgijima (230680305)
-   Date: 31 August 2025
+   Date: 14 September 2025
 */
 
 package za.ac.cput.controller;
@@ -59,9 +59,9 @@ public class PositionController {
         return service.findByY(y);
     }
 
-    @GetMapping("/findByZ/{z}")
-    public List<Position> findByZ(@PathVariable double z) {
-        return service.findByZ(z);
+    @GetMapping("/findByXAndY/{x}/{y}")
+    public List<Position> findByXAndY(@PathVariable double x, @PathVariable double y) {
+        return service.findByXAndY(x, y);
     }
 
     @GetMapping("/getAll")

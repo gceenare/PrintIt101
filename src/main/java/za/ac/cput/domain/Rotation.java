@@ -1,9 +1,8 @@
 /* Rotation.java
    Rotation POJO class
-   Author: Siyabulela Mgijima
-   Date: 28 Aug 2025
+   Author: Siyabulela Mgijima (230680305)
+   Date: 28 August 2025
 */
-
 package za.ac.cput.domain;
 
 import jakarta.persistence.*;
@@ -17,88 +16,64 @@ public class Rotation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int rotationId;
 
-    private double x;
-    private double y;
-    private double z;
+    @Column(nullable = false)
+    private double angle;
 
-    protected Rotation() {}
+    protected Rotation() {
+    }
 
     private Rotation(Builder builder) {
         this.rotationId = builder.rotationId;
-        this.x = builder.x;
-        this.y = builder.y;
-        this.z = builder.z;
+        this.angle = builder.angle;
     }
 
     public int getRotationId() {
         return rotationId;
     }
 
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
-    }
-    public double getZ() {
-        return z;
+    public double getAngle() {
+        return angle;
     }
 
     @Override
     public String toString() {
         return "Rotation{" +
                 "rotationId=" + rotationId +
-                ", x=" + x +
-                ", y=" + y +
-                ", z=" + z +
+                ", angle=" + angle +
                 '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Rotation)) return false;
         Rotation rotation = (Rotation) o;
-        return rotationId == rotation.rotationId;
+        return rotationId == rotation.rotationId &&
+                Double.compare(rotation.angle, angle) == 0;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(rotationId);
+        return Objects.hash(rotationId, angle);
     }
 
     public static class Builder {
         private int rotationId;
-        private double x;
-        private double y;
-        private double z;
+        private double angle;
 
         public Builder setRotationId(int rotationId) {
             this.rotationId = rotationId;
             return this;
         }
 
-        public Builder setX(double x) {
-            this.x = x;
-            return this;
-        }
-
-        public Builder setY(double y) {
-            this.y = y;
-            return this;
-        }
-
-        public Builder setZ(double z) {
-            this.z = z;
+        public Builder setAngle(double angle) {
+            this.angle = angle;
             return this;
         }
 
         public Builder copy(Rotation rotation) {
             this.rotationId = rotation.rotationId;
-            this.x = rotation.x;
-            this.y = rotation.y;
-            this.z = rotation.z;
+            this.angle = rotation.angle;
             return this;
         }
 

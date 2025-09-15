@@ -24,6 +24,10 @@ public class Helper {
     }
 
     public static boolean doubleIsInvalid(double value) {
+        return Double.isNaN(value) || Double.isInfinite(value);
+    }
+
+    public static boolean scaleIsInvalid(double value) {
         return value <= 0 || Double.isNaN(value) || Double.isInfinite(value);
     }
 

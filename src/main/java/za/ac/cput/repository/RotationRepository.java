@@ -1,7 +1,8 @@
 /* RotationRepository.java
    Rotation Repository
    Author: Siyabulela Mgijima (230680305)
-   Date: 28 August 2025 */
+   Date: 28 August 2025
+*/
 package za.ac.cput.repository;
 
 import za.ac.cput.domain.Rotation;
@@ -13,9 +14,7 @@ import java.util.Optional;
 
 @Repository
 public interface RotationRepository extends JpaRepository<Rotation, Integer> {
-    Optional<Rotation> findByRotationId(int RotationId);
+    Optional<Rotation> findByRotationId(int rotationId);
 
-    List<Rotation> findByX(double x);
-    List<Rotation> findByY(double y);
-    List<Rotation> findByZ(double z);
+    List<Rotation> findByAngle(double angle);
 }
