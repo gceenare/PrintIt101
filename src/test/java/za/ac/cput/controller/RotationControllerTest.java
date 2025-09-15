@@ -1,8 +1,3 @@
-/* RotationControllerTest.java
-   Test class for RotationController
-   Author: Siyabulela Mgijima (230680305)
-   Date: 30 August 2025
-*/
 package za.ac.cput.controller;
 
 import org.junit.jupiter.api.Test;
@@ -30,14 +25,6 @@ class RotationControllerTest {
     }
 
     @Test
-    void findByAngleX() {
-    }
-
-    @Test
-    void findByAngleY() {
-    }
-
-    @Test
-    void findByAngleZ() {
+    void findByAngle() {
     }
 }

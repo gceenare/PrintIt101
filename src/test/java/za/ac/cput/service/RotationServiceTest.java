@@ -1,14 +1,6 @@
-/* RotationServiceTest.java
-   Rotation Service Test
-   Author: Siyabulela Mgijima (230680305)
-   Date: 28 August 2025
-*/
 package za.ac.cput.service;
 
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
@@ -22,7 +14,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@TestMethodOrder(OrderAnnotation.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Transactional
 @Rollback
 class RotationServiceTest {
@@ -34,7 +26,7 @@ class RotationServiceTest {
     private RotationRepository rotationRepository;
 
     private Rotation createRotation() {
-        Rotation rotation = RotationFactory.createRotation(45.0, 90.0, 180.0);
+        Rotation rotation = RotationFactory.createRotation(45.0);
         assertNotNull(rotation, "Rotation creation failed in factory");
         return rotation;
     }
@@ -45,9 +37,7 @@ class RotationServiceTest {
         Rotation rotation = createRotation();
         Rotation saved = rotationService.create(rotation);
         assertNotNull(saved);
-        assertEquals(45.0, saved.getX());
-        assertEquals(90.0, saved.getY());
-        assertEquals(180.0, saved.getZ());
+        assertEquals(45.0, saved.getAngle());
         assertTrue(saved.getRotationId() > 0);
     }
 
@@ -58,8 +48,8 @@ class RotationServiceTest {
         Rotation saved = rotationRepository.save(rotation);
         Rotation found = rotationService.read(saved.getRotationId());
         assertNotNull(found);
-        assertEquals(90.0, found.getY());
         assertEquals(saved.getRotationId(), found.getRotationId());
+        assertEquals(45.0, found.getAngle());
     }
 
     @Test
@@ -69,15 +59,11 @@ class RotationServiceTest {
         Rotation saved = rotationRepository.save(rotation);
         Rotation updatedRotation = new Rotation.Builder()
                 .copy(saved)
-                .setX(10.0)
-                .setY(20.0)
-                .setZ(30.0)
+                .setAngle(90.0)
                 .build();
         Rotation updated = rotationService.update(updatedRotation);
         assertNotNull(updated);
-        assertEquals(10.0, updated.getX());
-        assertEquals(20.0, updated.getY());
-        assertEquals(30.0, updated.getZ());
+        assertEquals(90.0, updated.getAngle());
         assertEquals(saved.getRotationId(), updated.getRotationId());
     }
 
@@ -94,40 +80,32 @@ class RotationServiceTest {
     @Test
     @Order(5)
     void getAll() {
+        rotationRepository.deleteAll(); // clear DB
+
         Rotation rotation = createRotation();
-        rotationRepository.save(rotation);
+        Rotation saved = rotationRepository.save(rotation);
+
         List<Rotation> rotations = rotationService.getAll();
         assertFalse(rotations.isEmpty());
-        assertEquals(45.0, rotations.get(0).getX());
+
+        // Find by ID instead of assuming order
+        Rotation retrieved = rotations.stream()
+                .filter(r -> r.getRotationId() == saved.getRotationId())
+                .findFirst()
+                .orElse(null);
+
+        assertNotNull(retrieved);
+        assertEquals(45.0, retrieved.getAngle());
     }
+
 
     @Test
     @Order(6)
-    void findByX() {
+    void findByAngle() {
         Rotation rotation = createRotation();
         rotationRepository.save(rotation);
-        List<Rotation> found = rotationService.findByX(45.0);
+        List<Rotation> found = rotationService.findByAngle(45.0);
         assertFalse(found.isEmpty());
-        assertEquals(45.0, found.get(0).getX());
-    }
-
-    @Test
-    @Order(7)
-    void findByY() {
-        Rotation rotation = createRotation();
-        rotationRepository.save(rotation);
-        List<Rotation> found = rotationService.findByY(90.0);
-        assertFalse(found.isEmpty());
-        assertEquals(90.0, found.get(0).getY());
-    }
-
-    @Test
-    @Order(8)
-    void findByZ() {
-        Rotation rotation = createRotation();
-        rotationRepository.save(rotation);
-        List<Rotation> found = rotationService.findByZ(180.0);
-        assertFalse(found.isEmpty());
-        assertEquals(180.0, found.get(0).getZ());
+        assertEquals(45.0, found.get(0).getAngle());
     }
 }

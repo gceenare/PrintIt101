@@ -5,10 +5,7 @@
 */
 package za.ac.cput.service;
 
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
@@ -21,13 +18,16 @@ import za.ac.cput.factory.PositionFactory;
 import za.ac.cput.factory.RotationFactory;
 import za.ac.cput.factory.ScaleFactory;
 import za.ac.cput.repository.PlacementDataRepository;
+import za.ac.cput.repository.PositionRepository;
+import za.ac.cput.repository.RotationRepository;
+import za.ac.cput.repository.ScaleRepository;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@TestMethodOrder(OrderAnnotation.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Transactional
 @Rollback
 class PlacementDataServiceTest {
@@ -38,10 +38,20 @@ class PlacementDataServiceTest {
     @Autowired
     private PlacementDataRepository placementDataRepository;
 
+    @Autowired
+    private PositionRepository positionRepository;
+
+    @Autowired
+    private RotationRepository rotationRepository;
+
+    @Autowired
+    private ScaleRepository scaleRepository;
+
     private PlacementData createPlacementData() {
-        Position position = PositionFactory.createPosition(11.0, 2.0, 7.0);
-        Rotation rotation = RotationFactory.createRotation(10.9, 26.0, 33.0);
-        Scale scale = ScaleFactory.createScale(12.5, 21.5, 33.5);
+        // Save dependencies first
+        Position position = positionRepository.save(PositionFactory.createPosition(11.0, 2.0));
+        Rotation rotation = rotationRepository.save(RotationFactory.createRotation(10.9));
+        Scale scale = scaleRepository.save(ScaleFactory.createScale(12.5));
 
         PlacementData placementData = new PlacementData.Builder()
                 .setPosition(position)
@@ -81,7 +91,7 @@ class PlacementDataServiceTest {
 
         PlacementData updated = new PlacementData.Builder()
                 .copy(saved)
-                .setPosition(PositionFactory.createPosition(5.0, 5.0, 5.0))
+                .setPosition(positionRepository.save(PositionFactory.createPosition(5.0, 5.0)))
                 .build();
 
         PlacementData result = placementDataService.update(updated);

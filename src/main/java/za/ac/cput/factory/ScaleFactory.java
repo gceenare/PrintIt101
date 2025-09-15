@@ -8,14 +8,13 @@ import za.ac.cput.domain.Scale;
 import za.ac.cput.util.Helper;
 
 public class ScaleFactory {
-    public static Scale createScale(double x, double y, double z) {
-        if (Helper.doubleIsInvalid(x) || Helper.doubleIsInvalid(y) || Helper.doubleIsInvalid(z)) {
+    public static Scale createScale(double value) {
+        if (Helper.scaleIsInvalid(value)) {
             return null;
-    }
+        }
+
         return new Scale.Builder()
-                .setX(x)
-                .setY(y)
-                .setZ(z)
+                .setValue(value)
                 .build();
     }
 }

@@ -1,7 +1,8 @@
 /* ScaleService.java
    Scale Service
    Author: Siyabulela Mgijima (230680305)
-   Date: 28 August 2025 */
+   Updated: 14 September 2025
+*/
 package za.ac.cput.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,18 +49,7 @@ public class ScaleService implements IScaleService {
     }
 
     @Override
-    public List<Scale> findByX(double x) {
-        return repository.findByX(x);
-    }
-
-    @Override
-    public List<Scale> findByY(double y) {
-        return repository.findByY(y);
-    }
-
-    @Override
-    public List<Scale> findByZ(double z) {
-        return repository.findByZ(z);
+    public List<Scale> findByValue(double value) {
+        return repository.findByValue(value);
     }
 }
-
