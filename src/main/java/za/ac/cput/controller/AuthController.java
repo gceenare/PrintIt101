@@ -5,11 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.Customer;
+import za.ac.cput.domain.Admin;
 import za.ac.cput.domain.Contact;
 import za.ac.cput.domain.Address;
 import za.ac.cput.factory.ContactFactory;
 import za.ac.cput.factory.CustomerFactory;
 import za.ac.cput.service.CustomerService;
+import za.ac.cput.service.AdminService;
 import za.ac.cput.util.ErrorResponse;
 
 @RestController
@@ -20,13 +22,24 @@ public class AuthController {
     @Autowired
     private CustomerService customerService;
 
+    @Autowired
+    private AdminService adminService;
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
+            // Try customer login first
             Customer customer = customerService.findByUserName(loginRequest.getUserName());
             if (customer != null && customer.getPassword().equals(loginRequest.getPassword())) {
                 return ResponseEntity.ok(customer);
             }
+
+            // Try admin login if customer login fails
+            Admin admin = adminService.findByUserName(loginRequest.getUserName());
+            if (admin != null && admin.getPassword().equals(loginRequest.getPassword())) {
+                return ResponseEntity.ok(admin);
+            }
+
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new ErrorResponse("Invalid username or password"));
         } catch (Exception e) {
