@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.Order;
-import za.ac.cput.service.IOrderService;
+import za.ac.cput.service.OrderService;
 
 import java.util.List;
 
@@ -12,21 +12,17 @@ import java.util.List;
 @RequestMapping("/api/orders")
 public class OrderController {
 
-    private final IOrderService orderService;
+    private final OrderService orderService;
 
     @Autowired
-    public OrderController(IOrderService orderService) {
+    public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
 
-    @PostMapping
-    public ResponseEntity<Order> create(@RequestBody Order order) {
-        return ResponseEntity.ok(orderService.create(order));
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Order> read(@PathVariable int id) {
-        return ResponseEntity.ok(orderService.read(id));
+    @PostMapping("/checkout")
+    public ResponseEntity<Order> checkout(@RequestBody Order order) {
+        Order saved = orderService.create(order);
+        return ResponseEntity.ok(saved);
     }
 
     @GetMapping
