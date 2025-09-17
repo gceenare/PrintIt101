@@ -1,26 +1,33 @@
-/*Address.java
-  Contact POJO class
-  Author: Thabiso Mbatha (22016299)
-  Date: 11 May 2025 */
 package za.ac.cput.domain;
 
-public class User {
+import jakarta.persistence.*;
+
+@MappedSuperclass
+public abstract class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected int userId;
-    protected int addressId;
-    protected int contactId;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id")
+    protected Address address;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "contact_id")
+    protected Contact contact;
+
     protected String firstName;
     protected String lastName;
     protected String userName;
     protected String password;
     protected String role;
 
-    protected User(){
-    }
+    protected User() {}
 
-    protected User(Builder builder){
+    protected User(Builder<?> builder) {
         this.userId = builder.userId;
-        this.addressId = builder.addressId;
-        this.contactId = builder.contactId;
+        this.address = builder.address;
+        this.contact = builder.contact;
         this.firstName = builder.firstName;
         this.lastName = builder.lastName;
         this.userName = builder.userName;
@@ -28,16 +35,17 @@ public class User {
         this.role = builder.role;
     }
 
+    // Add getters
     public int getUserId() {
         return userId;
     }
 
-    public int getAddressId() {
-        return addressId;
+    public Address getAddress() {
+        return address;
     }
 
-    public int getContactId() {
-        return contactId;
+    public Contact getContact() {
+        return contact;
     }
 
     public String getFirstName() {
@@ -64,80 +72,80 @@ public class User {
     public String toString() {
         return "User{" +
                 "userId=" + userId +
-                ", address=" + addressId +
-                ", contact=" + contactId +
+                ", address=" + address +
+                ", contact=" + contact +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
                 ", role='" + role + '\'' +
                 '}';
     }
 
-    public static class Builder{
+    // Generic Builder
+    public static abstract class Builder<T extends Builder<T>> {
         private int userId;
-        private int addressId;
-        private int contactId;
+        private Address address;
+        private Contact contact;
         private String firstName;
         private String lastName;
         private String userName;
         private String password;
         private String role;
 
-        public Builder setUserId(int userId) {
+        public T setUserId(int userId) {
             this.userId = userId;
-            return this;
+            return self();
         }
 
-        public Builder setAddressId(int addressId) {
-            this.addressId = addressId;
-            return this;
+        public T setAddress(Address address) {
+            this.address = address;
+            return self();
         }
 
-        public Builder setContactId(int contactId) {
-            this.contactId = contactId;
-            return this;
+        public T setContact(Contact contact) {
+            this.contact = contact;
+            return self();
         }
 
-        public Builder setFirstName(String firstName) {
+        public T setFirstName(String firstName) {
             this.firstName = firstName;
-            return this;
+            return self();
         }
 
-        public Builder setLastName(String lastName) {
+        public T setLastName(String lastName) {
             this.lastName = lastName;
-            return this;
+            return self();
         }
 
-        public Builder setUserName(String userName) {
+        public T setUserName(String userName) {
             this.userName = userName;
-            return this;
+            return self();
         }
 
-        public Builder setPassword(String password) {
+        public T setPassword(String password) {
             this.password = password;
-            return this;
+            return self();
         }
 
-        public Builder setRole(String role) {
+        public T setRole(String role) {
             this.role = role;
-            return this;
+            return self();
         }
 
-        public Builder copy(User user){
+        protected abstract T self();
+
+        public abstract User build();
+
+        public T copy(User user) {
             this.userId = user.userId;
-            this.addressId = user.addressId;
-            this.contactId = user.contactId;
+            this.address = user.address;
+            this.contact = user.contact;
             this.firstName = user.firstName;
             this.lastName = user.lastName;
             this.userName = user.userName;
             this.password = user.password;
             this.role = user.role;
-            return this;
-        }
-
-        public User build(){
-            return new User(this);
+            return self();
         }
     }
 }

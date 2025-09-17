@@ -1,18 +1,15 @@
-/*   Customer.java
-
-     Customer POJO class
-
-     Author: Zakhir McKinnon (22016299)
-
-     Date: 11 May 2025 */
-
 package za.ac.cput.domain;
 
-public class Customer extends User {
-    protected double customerDiscount;
+import jakarta.persistence.*;
 
-    private Customer() {
-    }
+import java.util.Objects;
+
+@Entity
+@Table(name = "customers")
+public class Customer extends User {
+    private double customerDiscount;
+
+    protected Customer() {}
 
     private Customer(Builder builder) {
         super(builder);
@@ -30,7 +27,20 @@ public class Customer extends User {
                 "} " + super.toString();
     }
 
-    public static class Builder extends User.Builder {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Customer customer = (Customer) o;
+        return Objects.equals(userId, customer.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId);
+    }
+
+    public static class Builder extends User.Builder<Builder> {
         private double customerDiscount;
 
         public Builder setCustomerDiscount(double customerDiscount) {
@@ -38,12 +48,21 @@ public class Customer extends User {
             return this;
         }
 
-        public Builder copy(Customer customer) {
-            super.copy(customer);
-            this.customerDiscount = customer.customerDiscount;
+        @Override
+        protected Builder self() {
             return this;
         }
 
+        @Override
+        public Builder copy(User user) {
+            super.copy(user);
+            if (user instanceof Customer customer) {
+                this.customerDiscount = customer.customerDiscount;
+            }
+            return this;
+        }
+
+        @Override
         public Customer build() {
             return new Customer(this);
         }

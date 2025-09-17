@@ -1,68 +1,79 @@
 /* Rotation.java
    Rotation POJO class
    Author: Siyabulela Mgijima (230680305)
-   Date: 11 May 2025 */
+   Date: 28 August 2025
+*/
 package za.ac.cput.domain;
 
-public class Rotation {
-    protected double x;
-    protected double y;
-    protected double z;
+import jakarta.persistence.*;
+import java.util.Objects;
 
-    private Rotation() {
+@Entity
+@Table(name = "rotations")
+public class Rotation {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int rotationId;
+
+    @Column(nullable = false)
+    private double angle;
+
+    protected Rotation() {
     }
 
     private Rotation(Builder builder) {
-        this.x = builder.x;
-        this.y = builder.y;
-        this.z = builder.z;
+        this.rotationId = builder.rotationId;
+        this.angle = builder.angle;
     }
 
-    public double getX() {
-        return x;
+    public int getRotationId() {
+        return rotationId;
     }
 
-    public double getY() {
-        return y;
-    }
-
-    public double getZ() {
-        return z;
+    public double getAngle() {
+        return angle;
     }
 
     @Override
     public String toString() {
         return "Rotation{" +
-                "x=" + x +
-                ", y=" + y +
-                ", z=" + z +
+                "rotationId=" + rotationId +
+                ", angle=" + angle +
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Rotation)) return false;
+        Rotation rotation = (Rotation) o;
+        return rotationId == rotation.rotationId &&
+                Double.compare(rotation.angle, angle) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(rotationId, angle);
+    }
+
     public static class Builder {
-        protected double x;
-        protected double y;
-        protected double z;
+        private int rotationId;
+        private double angle;
 
-        public Builder setX(double x) {
-            this.x = x;
+        public Builder setRotationId(int rotationId) {
+            this.rotationId = rotationId;
             return this;
         }
 
-        public Builder setY(double y) {
-            this.y = y;
-            return this;
-        }
-
-        public Builder setZ(double z) {
-            this.z = z;
+        public Builder setAngle(double angle) {
+            this.angle = angle;
             return this;
         }
 
         public Builder copy(Rotation rotation) {
-            this.x = rotation.x;
-            this.y = rotation.y;
-            this.z = rotation.z;
+            this.rotationId = rotation.rotationId;
+            this.angle = rotation.angle;
             return this;
         }
 
@@ -71,5 +82,3 @@ public class Rotation {
         }
     }
 }
-
-

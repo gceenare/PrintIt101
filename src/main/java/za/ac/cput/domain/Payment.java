@@ -1,14 +1,22 @@
 package za.ac.cput.domain;
 
-/* Paymeny.java
+import jakarta.persistence.*;
+import java.io.Serializable;
 
-     Payment POJO class
+@Entity
+@Table(name = "payments")
+public class Payment implements Serializable {
 
-     Author: G Mbabe (222836040)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer paymentId;
 
-     Date: 11 May 2025 */
+    private double amount;
 
-public class Payment {
+    @Enumerated(EnumType.STRING)
+    private paymentMethod paymentMethod;
+
+    private String paymentDate;
 
     protected int paymentId;
     protected double amount;
@@ -16,8 +24,8 @@ public class Payment {
     protected String paymentDate;
     private String paymentStatus;
 
-    private Payment() {
-    }
+    public Payment() { }
+
     private Payment(Builder builder) {
         this.paymentId = builder.paymentId;
         this.amount = builder.amount;
@@ -40,6 +48,7 @@ public class Payment {
     public String getPaymentStatus() {
         return paymentStatus;
     }
+
     @Override
     public String toString() {
         return "Payment{" +
@@ -52,13 +61,13 @@ public class Payment {
     }
 
     public static class Builder {
-        private int paymentId;
+        private Integer paymentId;
         private double amount;
         private PaymentMethod paymentMethod;
         private String paymentDate;
         private String paymentStatus;
 
-        public Builder setPaymentId(int paymentId) {
+        public Builder setPaymentId(Integer paymentId) {
             this.paymentId = paymentId;
             return this;
         }

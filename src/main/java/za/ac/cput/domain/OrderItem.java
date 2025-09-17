@@ -1,23 +1,26 @@
+/*
+OrderItem.java
+OrderItem POJO class
+Author: L Mbangata (222558156)
+Date: 11 May 2025
+*/
 package za.ac.cput.domain;
-
-/* OrderItem.java
-
-     OrderItem POJO class
-
-     Author: G Mbabe (222836040)
-
-     Date: 11 May 2025 */
-
+import jakarta.persistence.*;
+import java.util.Objects;
+@Entity
+@Table(name = "order_items")
 public class OrderItem {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int orderItemId;
+    private int productId;
+    private int quantity;
+    private double pricePerUnit;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id")
+    private Order order;
 
-    protected int orderItemId;
-
-    protected int productId;
-    protected int quantity;
-    protected double pricePerUnit;
-
-
-    private OrderItem() {
+    protected OrderItem() {
     }
 
     private OrderItem(Builder builder) {
@@ -25,11 +28,13 @@ public class OrderItem {
         this.productId = builder.productId;
         this.quantity = builder.quantity;
         this.pricePerUnit = builder.pricePerUnit;
+        this.order = builder.order;
     }
 
     public int getOrderItemId() {
         return orderItemId;
     }
+
     public int getProductId() {
         return productId;
     }
@@ -37,9 +42,15 @@ public class OrderItem {
     public int getQuantity() {
         return quantity;
     }
+
     public double getPricePerUnit() {
         return pricePerUnit;
     }
+
+    public Order getOrder() {
+        return order;
+    }
+
     @Override
     public String toString() {
         return "OrderItem{" +
@@ -49,11 +60,26 @@ public class OrderItem {
                 ", pricePerUnit=" + pricePerUnit +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderItem orderItem = (OrderItem) o;
+        return orderItemId == orderItem.orderItemId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(orderItemId);
+    }
+
     public static class Builder {
         private int orderItemId;
         private int productId;
         private int quantity;
         private double pricePerUnit;
+        private Order order;
 
         public Builder setOrderItemId(int orderItemId) {
             this.orderItemId = orderItemId;
@@ -74,11 +100,18 @@ public class OrderItem {
             this.pricePerUnit = pricePerUnit;
             return this;
         }
+
+        public Builder setOrder(Order order) {
+            this.order = order;
+            return this;
+        }
+
         public Builder copy(OrderItem orderItem) {
             this.orderItemId = orderItem.orderItemId;
             this.productId = orderItem.productId;
             this.quantity = orderItem.quantity;
             this.pricePerUnit = orderItem.pricePerUnit;
+            this.order = orderItem.order;
             return this;
         }
 
@@ -86,5 +119,4 @@ public class OrderItem {
             return new OrderItem(this);
         }
     }
-
 }

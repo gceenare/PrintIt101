@@ -1,71 +1,78 @@
-/*   Scale.java
-
-     Scale POJO class
-
-     Author: Zakhir McKinnon (22016299)
-
-     Date: 11 May 2025 */
+/* Scale.java
+   Scale POJO class
+   Author: Siyabulela Mgijima (230680305)
+   Date: 28 August 2025
+*/
 package za.ac.cput.domain;
 
-public class Scale {
-    protected double x;
-    protected double y;
-    protected double z;
+import jakarta.persistence.*;
+import java.util.Objects;
 
-    private Scale() {
+@Entity
+@Table(name = "scales")
+public class Scale {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int scaleId;
+
+    private double value;
+
+    protected Scale() {
     }
 
     private Scale(Builder builder) {
-        this.x = builder.x;
-        this.y = builder.y;
-        this.z = builder.z;
+        this.scaleId = builder.scaleId;
+        this.value = builder.value;
     }
 
-    public double getX() {
-        return x;
+    public int getScaleId() {
+        return scaleId;
     }
 
-    public double getY() {
-        return y;
-    }
-
-    public double getZ() {
-        return z;
+    public double getValue() {
+        return value;
     }
 
     @Override
     public String toString() {
         return "Scale{" +
-                "x=" + x +
-                ", y=" + y +
-                ", z=" + z +
+                "scaleId=" + scaleId +
+                ", value=" + value +
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Scale)) return false;
+        Scale scale = (Scale) o;
+        return scaleId == scale.scaleId &&
+                Double.compare(scale.value, value) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(scaleId, value);
+    }
+
     public static class Builder {
-        private double x;
-        private double y;
-        private double z;
+        private int scaleId;
+        private double value;
 
-        public Builder setX(double x) {
-            this.x = x;
+        public Builder setScaleId(int scaleId) {
+            this.scaleId = scaleId;
             return this;
         }
 
-        public Builder setY(double y) {
-            this.y = y;
-            return this;
-        }
-
-        public Builder setZ(double z) {
-            this.z = z;
+        public Builder setValue(double value) {
+            this.value = value;
             return this;
         }
 
         public Builder copy(Scale scale) {
-            this.x = scale.x;
-            this.y = scale.y;
-            this.z = scale.z;
+            this.scaleId = scale.scaleId;
+            this.value = scale.value;
             return this;
         }
 
