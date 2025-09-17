@@ -18,6 +18,10 @@ public class Payment implements Serializable {
 
     private String paymentDate;
 
+    protected int paymentId;
+    protected double amount;
+    protected PaymentMethod paymentMethod;
+    protected String paymentDate;
     private String paymentStatus;
 
     public Payment() { }
@@ -29,20 +33,28 @@ public class Payment implements Serializable {
         this.paymentDate = builder.paymentDate;
         this.paymentStatus = builder.paymentStatus;
     }
-
-    // Getters
-    public Integer getPaymentId() { return paymentId; }
-    public double getAmount() { return amount; }
-    public paymentMethod getPaymentMethod() { return paymentMethod; }
-    public String getPaymentDate() { return paymentDate; }
-    public String getPaymentStatus() { return paymentStatus; }
+    public int getPaymentId() {
+        return paymentId;
+    }
+    public double getAmount() {
+        return amount;
+    }
+    public PaymentMethod getPaymentMethod() {
+        return paymentMethod;
+    }
+    public String getPaymentDate() {
+        return paymentDate;
+    }
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
 
     @Override
     public String toString() {
         return "Payment{" +
                 "paymentId=" + paymentId +
                 ", amount=" + amount +
-                ", paymentMethod=" + paymentMethod +
+                ", PaymentMethod=" + paymentMethod +
                 ", paymentDate='" + paymentDate + '\'' +
                 ", paymentStatus='" + paymentStatus + '\'' +
                 '}';
@@ -51,7 +63,7 @@ public class Payment implements Serializable {
     public static class Builder {
         private Integer paymentId;
         private double amount;
-        private paymentMethod paymentMethod;
+        private PaymentMethod paymentMethod;
         private String paymentDate;
         private String paymentStatus;
 
@@ -63,7 +75,7 @@ public class Payment implements Serializable {
             this.amount = amount;
             return this;
         }
-        public Builder setPaymentMethod(paymentMethod paymentMethod) {
+        public Builder setPaymentMethod(PaymentMethod paymentMethod) {
             this.paymentMethod = paymentMethod;
             return this;
         }
