@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public class DesignService implements IDesignService {
 
-    private DesignRepository repository;
+    private final DesignRepository repository;
 
     @Autowired
     public DesignService(DesignRepository repository) {
@@ -18,31 +18,44 @@ public class DesignService implements IDesignService {
 
     @Override
     public Design create(Design design) {
-        return null;
+        // Saves the new design entity to the database.
+        return repository.save(design);
     }
 
     @Override
     public Design read(int designId) {
-        return null;
+        // Finds a design by its ID, returning null if not found.
+        return repository.findById(designId).orElse(null);
     }
 
     @Override
     public Design update(Design design) {
+        // Checks if the design exists before saving the updated version.
+        if (repository.existsById(design.getDesignId())) {
+            return repository.save(design);
+        }
         return null;
     }
 
     @Override
     public boolean delete(int designId) {
+        // Checks if the design exists before deleting it.
+        if (repository.existsById(designId)) {
+            repository.deleteById(designId);
+            return true;
+        }
         return false;
     }
 
     @Override
     public List<Design> getAll() {
-        return List.of();
+        // Returns a list of all designs from the database.
+        return repository.findAll();
     }
 
     @Override
     public List<Design> findByFilePath(String filePath) {
-        return List.of();
+        // Finds designs where the file path contains the given string.
+        return repository.findByFilePathContaining(filePath);
     }
 }
