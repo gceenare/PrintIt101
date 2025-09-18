@@ -1,6 +1,7 @@
 package za.ac.cput.factory;
 
 import za.ac.cput.domain.Payment;
+
 import za.ac.cput.domain.paymentMethod;
 import java.time.LocalDate;
 
@@ -17,4 +18,5 @@ public class PaymentFactory {
                 .setPaymentStatus(paymentStatus == null ? "PENDING" : paymentStatus)
                 .build();
     }
+
 }
