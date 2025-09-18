@@ -18,17 +18,19 @@ public class DesignService implements IDesignService {
 
     @Override
     public Design create(Design design) {
-        // This now saves the design object (with its file path) to the database.
+
         return repository.save(design);
     }
 
     @Override
     public Design read(int designId) {
+
         return repository.findById(designId).orElse(null);
     }
 
     @Override
     public Design update(Design design) {
+
         if (repository.existsById(design.getDesignId())) {
             return repository.save(design);
         }
@@ -37,6 +39,7 @@ public class DesignService implements IDesignService {
 
     @Override
     public boolean delete(int designId) {
+
         if (repository.existsById(designId)) {
             repository.deleteById(designId);
             return true;
@@ -46,11 +49,13 @@ public class DesignService implements IDesignService {
 
     @Override
     public List<Design> getAll() {
+
         return repository.findAll();
     }
 
     @Override
     public List<Design> findByFilePath(String filePath) {
+
         return repository.findByFilePathContaining(filePath);
     }
 }
