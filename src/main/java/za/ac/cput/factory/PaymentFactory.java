@@ -2,12 +2,12 @@ package za.ac.cput.factory;
 
 import za.ac.cput.domain.Payment;
 
-import za.ac.cput.domain.paymentMethod;
+import za.ac.cput.domain.PaymentMethod;
 import java.time.LocalDate;
 
 public class PaymentFactory {
 
-    public static Payment createPayment(double amount, paymentMethod paymentMethod, String paymentStatus) {
+    public static Payment createPayment(double amount, PaymentMethod paymentMethod, String paymentStatus) {
         if (amount <= 0 || paymentMethod == null) {
             return null;
         }
