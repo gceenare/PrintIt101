@@ -3,7 +3,7 @@ package za.ac.cput.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import za.ac.cput.domain.Payment;
-import za.ac.cput.domain.paymentMethod;
+import za.ac.cput.domain.PaymentMethod;
 import za.ac.cput.repository.PaymentRepository;
 
 import java.util.List;
@@ -31,7 +31,7 @@ public class PaymentService implements IPaymentService {
 
     @Override
     public Payment update(Payment payment) {
-        if (payment == null || payment.getPaymentId() == null || !repository.existsById(payment.getPaymentId())) {
+        if (payment == null || !repository.existsById(payment.getPaymentId())) {
             return null;
         }
         return repository.save(payment);
@@ -55,7 +55,13 @@ public class PaymentService implements IPaymentService {
     }
 
     @Override
-    public List<Payment> findByPaymentMethod(paymentMethod method) {
-        return repository.findByPaymentMethod(method);
+    public List<Payment> findByPaymentMethod(PaymentMethod method) {
+        return List.of();
     }
+
+
+
+
+
+
 }

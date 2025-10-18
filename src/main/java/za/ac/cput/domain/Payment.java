@@ -14,14 +14,10 @@ public class Payment implements Serializable {
     private double amount;
 
     @Enumerated(EnumType.STRING)
-    private paymentMethod paymentMethod;
+    private PaymentMethod paymentMethod;
 
     private String paymentDate;
 
-    protected int paymentId;
-    protected double amount;
-    protected PaymentMethod paymentMethod;
-    protected String paymentDate;
     private String paymentStatus;
 
     public Payment() { }
