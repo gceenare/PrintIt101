@@ -3,6 +3,7 @@ package za.ac.cput.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.Customer;
 import za.ac.cput.domain.Admin;
@@ -13,6 +14,10 @@ import za.ac.cput.factory.CustomerFactory;
 import za.ac.cput.service.CustomerService;
 import za.ac.cput.service.AdminService;
 import za.ac.cput.util.ErrorResponse;
+import za.ac.cput.util.JwtUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -25,19 +30,60 @@ public class AuthController {
     @Autowired
     private AdminService adminService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
             // Try customer login first
             Customer customer = customerService.findByUserName(loginRequest.getUserName());
-            if (customer != null && customer.getPassword().equals(loginRequest.getPassword())) {
-                return ResponseEntity.ok(customer);
+            if (customer != null && passwordEncoder.matches(loginRequest.getPassword(), customer.getPassword())) {
+                // Generate JWT token
+                String token = jwtUtil.generateToken(
+                        customer.getUserName(),
+                        (long) customer.getUserId(),
+                        customer.getRole()
+                );
+
+                // Create response with token
+                Map<String, Object> response = new HashMap<>();
+                response.put("userId", customer.getUserId());
+                response.put("firstName", customer.getFirstName());
+                response.put("lastName", customer.getLastName());
+                response.put("userName", customer.getUserName());
+                response.put("role", customer.getRole());
+                response.put("customerDiscount", customer.getCustomerDiscount());
+                response.put("contact", customer.getContact());
+                response.put("address", customer.getAddress());
+                response.put("token", token);
+
+                return ResponseEntity.ok(response);
             }
 
             // Try admin login if customer login fails
             Admin admin = adminService.findByUserName(loginRequest.getUserName());
-            if (admin != null && admin.getPassword().equals(loginRequest.getPassword())) {
-                return ResponseEntity.ok(admin);
+            if (admin != null && passwordEncoder.matches(loginRequest.getPassword(), admin.getPassword())) {
+                // Generate JWT token
+                String token = jwtUtil.generateToken(
+                        admin.getUserName(),
+                        (long) admin.getUserId(),
+                        admin.getRole()
+                );
+
+                // Create response with token
+                Map<String, Object> response = new HashMap<>();
+                response.put("userId", admin.getUserId());
+                response.put("firstName", admin.getFirstName());
+                response.put("lastName", admin.getLastName());
+                response.put("userName", admin.getUserName());
+                response.put("role", admin.getRole());
+                response.put("token", token);
+
+                return ResponseEntity.ok(response);
             }
 
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -81,6 +127,9 @@ public class AuthController {
         System.out.println("DEBUG - Created address poBoxNumber: " + address.getPoBoxNumber());
         System.out.println("DEBUG - Created address unitNumber: " + address.getUnitNumber());
 
+        // Hash the password before creating customer
+        String hashedPassword = passwordEncoder.encode(registerRequest.getPassword());
+
         Customer newCustomer = CustomerFactory.createCustomer(
                 address,
                 contact,
@@ -88,7 +137,7 @@ public class AuthController {
                 registerRequest.getLastName(),
                 0.1,
                 registerRequest.getUserName(),
-                registerRequest.getPassword(),
+                hashedPassword,
                 "CUSTOMER"
         );
 

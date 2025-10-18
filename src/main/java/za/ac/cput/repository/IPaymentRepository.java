@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 @Repository
-public interface PaymentRepository extends JpaRepository<Payment, Integer> {
+public interface IPaymentRepository extends JpaRepository<Payment, Integer> {
 
     List<Payment> findByPaymentStatus(String paymentStatus);
 

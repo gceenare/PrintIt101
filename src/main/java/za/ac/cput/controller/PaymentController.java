@@ -1,7 +1,6 @@
 package za.ac.cput.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.Payment;
@@ -10,52 +9,57 @@ import za.ac.cput.service.IPaymentService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/payments")
 @CrossOrigin(origins = "*")
+@RequestMapping("/payment")
 public class PaymentController {
 
-    private final IPaymentService service;
+    private final IPaymentService paymentService;
 
     @Autowired
-    public PaymentController(IPaymentService service) {
-        this.service = service;
+    public PaymentController(IPaymentService paymentService) {
+        this.paymentService = paymentService;
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Payment> create(@RequestBody Payment payment) {
         try {
-            Payment created = service.create(payment);
-            if (created == null) return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-            return new ResponseEntity<>(created, HttpStatus.CREATED);
+            Payment created = paymentService.create(payment);
+            if (created == null) {
+                return ResponseEntity.badRequest().build();
+            }
+            return ResponseEntity.ok(created);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.internalServerError().build();
         }
     }
 
-    @GetMapping
-    public ResponseEntity<List<Payment>> getAll() {
-        return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}")
+    @GetMapping("/read/{id}")
     public ResponseEntity<Payment> read(@PathVariable Integer id) {
-        Payment p = service.read(id);
-        if (p == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(p, HttpStatus.OK);
+        Payment payment = paymentService.read(id);
+        if (payment != null) {
+            return ResponseEntity.ok(payment);
+        }
+        return ResponseEntity.notFound().build();
     }
 
-    @PutMapping
+    @GetMapping("/getall")
+    public ResponseEntity<List<Payment>> getAll() {
+        return ResponseEntity.ok(paymentService.getAll());
+    }
+
+    @PutMapping("/update")
     public ResponseEntity<Payment> update(@RequestBody Payment payment) {
-        Payment updated = service.update(payment);
-        if (updated == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        return new ResponseEntity<>(updated, HttpStatus.OK);
+        Payment updated = paymentService.update(payment);
+        if (updated == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(updated);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        boolean deleted = service.delete(id);
-        if (!deleted) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Boolean> delete(@PathVariable Integer id) {
+        boolean deleted = paymentService.delete(id);
+        return ResponseEntity.ok(deleted);
     }
 }
