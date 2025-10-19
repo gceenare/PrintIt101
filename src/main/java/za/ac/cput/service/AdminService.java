@@ -9,6 +9,7 @@ package za.ac.cput.service;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import za.ac.cput.domain.Admin;
 import za.ac.cput.domain.Address;
@@ -28,11 +29,13 @@ public class AdminService implements IAdminService {
 
     private final AdminRepository adminRepository;
     private final CustomerRepository customerRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AdminService(AdminRepository adminRepository, CustomerRepository customerRepository) {
+    public AdminService(AdminRepository adminRepository, CustomerRepository customerRepository, PasswordEncoder passwordEncoder) {
         this.adminRepository = adminRepository;
         this.customerRepository = customerRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -93,11 +96,23 @@ public class AdminService implements IAdminService {
     }
 
     @Override
+    @Transactional
     public Admin update(Admin admin) {
-        if (adminRepository.existsById(admin.getUserId())) {
-            return adminRepository.save(admin);
+        if ((admin == null) || false) {
+            throw new IllegalArgumentException("Admin or Admin ID cannot be null");
         }
-        return null;
+
+        // Encode password if it's being updated and not already BCrypt encoded
+        if (admin.getPassword() != null && !admin.getPassword().startsWith("$2a$")) {
+            // Create a new Admin with encoded password using the builder
+            Admin updatedAdmin = new Admin.Builder()
+                    .copy(admin)
+                    .setPassword(passwordEncoder.encode(admin.getPassword()))
+                    .build();
+            return adminRepository.save(updatedAdmin);
+        }
+
+        return adminRepository.save(admin);
     }
 
     @Override
@@ -195,9 +210,7 @@ public class AdminService implements IAdminService {
     public Customer activateCustomer(Integer customerId) {
         Customer customer = customerRepository.findById(customerId).orElse(null);
         if (customer != null) {
-            // Assuming we add an 'active' field to Customer in the future
-            // For now, we'll just return the customer as-is
-            // customer.setActive(true);
+           
             return customerRepository.save(customer);
         }
         return null;
@@ -208,16 +221,10 @@ public class AdminService implements IAdminService {
     public Customer deactivateCustomer(Integer customerId) {
         Customer customer = customerRepository.findById(customerId).orElse(null);
         if (customer != null) {
-            // Assuming we add an 'active' field to Customer in the future
-            // For now, we'll just return the customer as-is
-            // customer.setActive(false);
             return customerRepository.save(customer);
         }
         return null;
     }
-
-
-
 
     @PostConstruct
     public void createSuperAdmin() {
@@ -233,6 +240,8 @@ public class AdminService implements IAdminService {
                     "0000000000", "superadmin@example.com"
             );
 
+            String encodedPassword = passwordEncoder.encode("supersecretpassword"); 
+
             Admin superAdmin = AdminFactory.createAdmin(
                     address,
                     contact,
@@ -242,12 +251,13 @@ public class AdminService implements IAdminService {
                     "SYSTEM",
                     "ALL_PERMISSIONS",
                     superAdminUsername,
-                    "supersecretpassword",
-                    "ADMIN" // or role = "SUPER_ADMIN"
+                    encodedPassword,
+                    "ADMIN"
             );
 
             create(superAdmin);
             System.out.println("Super Admin created: " + superAdminUsername);
         }
     }
+
 }
