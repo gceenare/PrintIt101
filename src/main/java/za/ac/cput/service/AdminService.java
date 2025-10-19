@@ -210,9 +210,7 @@ public class AdminService implements IAdminService {
     public Customer activateCustomer(Integer customerId) {
         Customer customer = customerRepository.findById(customerId).orElse(null);
         if (customer != null) {
-            // Assuming we add an 'active' field to Customer in the future
-            // For now, we'll just return the customer as-is
-            // customer.setActive(true);
+           
             return customerRepository.save(customer);
         }
         return null;
@@ -223,9 +221,6 @@ public class AdminService implements IAdminService {
     public Customer deactivateCustomer(Integer customerId) {
         Customer customer = customerRepository.findById(customerId).orElse(null);
         if (customer != null) {
-            // Assuming we add an 'active' field to Customer in the future
-            // For now, we'll just return the customer as-is
-            // customer.setActive(false);
             return customerRepository.save(customer);
         }
         return null;
@@ -245,7 +240,7 @@ public class AdminService implements IAdminService {
                     "0000000000", "superadmin@example.com"
             );
 
-            String encodedPassword = passwordEncoder.encode("supersecretpassword"); // ✅ encode here
+            String encodedPassword = passwordEncoder.encode("supersecretpassword"); 
 
             Admin superAdmin = AdminFactory.createAdmin(
                     address,
