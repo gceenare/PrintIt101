@@ -2,6 +2,9 @@ package za.ac.cput.service;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import za.ac.cput.domain.Address;
 import za.ac.cput.domain.Contact;
@@ -14,7 +17,7 @@ import za.ac.cput.repository.EmployeeRepository;
 import java.util.List;
 
 @Service
-public class EmployeeService implements IEmployeeService {
+public class EmployeeService implements IEmployeeService, UserDetailsService {
 
     private final EmployeeRepository repository;
 
@@ -124,5 +127,11 @@ public class EmployeeService implements IEmployeeService {
     @Override
     public boolean existsByUserName(String userName) {
         return repository.existsByUserName(userName);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return repository.findByUserName(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 }

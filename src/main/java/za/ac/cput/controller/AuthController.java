@@ -5,16 +5,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import za.ac.cput.domain.Customer;
 import za.ac.cput.domain.Admin;
-import za.ac.cput.domain.Contact;
-import za.ac.cput.domain.Address;
-import za.ac.cput.factory.ContactFactory;
-import za.ac.cput.factory.CustomerFactory;
-import za.ac.cput.service.CustomerService;
+import za.ac.cput.domain.Customer;
+import za.ac.cput.domain.Employee;
+import za.ac.cput.domain.User;
 import za.ac.cput.service.AdminService;
+import za.ac.cput.service.CustomerService;
+import za.ac.cput.service.EmployeeService;
+import za.ac.cput.service.JwtService;
 import za.ac.cput.util.ErrorResponse;
-import za.ac.cput.util.JwtUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,207 +30,83 @@ public class AuthController {
     private AdminService adminService;
 
     @Autowired
+    private EmployeeService employeeService;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private JwtUtil jwtUtil;
+    private JwtService jwtService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
-            // Try customer login first
+            User user = null;
+
+            // Check Customer
             Customer customer = customerService.findByUserName(loginRequest.getUserName());
             if (customer != null && passwordEncoder.matches(loginRequest.getPassword(), customer.getPassword())) {
-                // Generate JWT token
-                String token = jwtUtil.generateToken(
-                        customer.getUserName(),
-                        (long) customer.getUserId(),
-                        customer.getRole()
-                );
-
-                // Create response with token
-                Map<String, Object> response = new HashMap<>();
-                response.put("userId", customer.getUserId());
-                response.put("firstName", customer.getFirstName());
-                response.put("lastName", customer.getLastName());
-                response.put("userName", customer.getUserName());
-                response.put("role", customer.getRole());
-                response.put("customerDiscount", customer.getCustomerDiscount());
-                response.put("contact", customer.getContact());
-                response.put("address", customer.getAddress());
-                response.put("token", token);
-
-                return ResponseEntity.ok(response);
+                user = customer;
             }
 
-            // Try admin login if customer login fails
+            // Check Admin
             Admin admin = adminService.findByUserName(loginRequest.getUserName());
             if (admin != null && passwordEncoder.matches(loginRequest.getPassword(), admin.getPassword())) {
-                // Generate JWT token
-                String token = jwtUtil.generateToken(
-                        admin.getUserName(),
-                        (long) admin.getUserId(),
-                        admin.getRole()
-                );
-
-                // Create response with token
-                Map<String, Object> response = new HashMap<>();
-                response.put("userId", admin.getUserId());
-                response.put("firstName", admin.getFirstName());
-                response.put("lastName", admin.getLastName());
-                response.put("userName", admin.getUserName());
-                response.put("role", admin.getRole());
-                response.put("token", token);
-
-                return ResponseEntity.ok(response);
+                user = admin;
             }
 
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new ErrorResponse("Invalid username or password"));
+            // Check Employee
+            Employee employee = employeeService.findByUserName(loginRequest.getUserName());
+            if (employee != null && passwordEncoder.matches(loginRequest.getPassword(), employee.getPassword())) {
+                user = employee;
+            }
+
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(new ErrorResponse("Invalid username or password"));
+            }
+
+            String token = jwtService.generateToken(user);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("userId", user.getUserId());
+            response.put("firstName", user.getFirstName());
+            response.put("lastName", user.getLastName());
+            response.put("userName", user.getUserName());
+            response.put("role", user.getRole());
+            response.put("token", token);
+
+            // Include extra fields for specific types
+            if (user instanceof Customer) {
+                response.put("customerDiscount", ((Customer) user).getCustomerDiscount());
+                response.put("contact", ((Customer) user).getContact());
+                response.put("address", ((Customer) user).getAddress());
+            } else if (user instanceof Admin) {
+                response.put("adminLevel", ((Admin) user).getAdminLevel());
+                response.put("department", ((Admin) user).getDepartment());
+                response.put("permissions", ((Admin) user).getPermissions());
+            } else if (user instanceof Employee) {
+                response.put("position", ((Employee) user).getPosition());
+                response.put("staffDiscount", ((Employee) user).getStaffDiscount());
+            }
+
+            return ResponseEntity.ok(response);
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ErrorResponse("Login failed: " + e.getMessage()));
         }
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
-
-        if (customerService.existsByUserName(registerRequest.getUserName())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new ErrorResponse("Username already exists"));
-        }
-
-        Contact contact = ContactFactory.createContact(
-                registerRequest.getContact().getPhone(),
-                registerRequest.getContact().getEmail()
-        );
-
-        System.out.println("DEBUG - Received propertyNumber: " + registerRequest.getAddress().getPropertyNumber());
-        System.out.println("DEBUG - Received poBoxNumber: " + registerRequest.getAddress().getPoBoxNumber());
-        System.out.println("DEBUG - Received unitNumber: " + registerRequest.getAddress().getUnitNumber());
-
-        Address address = new Address.Builder()
-                .setPropertyNumber(registerRequest.getAddress().getPropertyNumber())
-                .setStreet(registerRequest.getAddress().getStreet())
-                .setMunicipality(registerRequest.getAddress().getMunicipality())
-                .setProvince(registerRequest.getAddress().getProvince())
-                .setPostalCode(registerRequest.getAddress().getPostalCode())
-                .setCountry(registerRequest.getAddress().getCountry())
-                .setBuildingName(registerRequest.getAddress().getBuildingName())
-                .setUnitNumber(registerRequest.getAddress().getUnitNumber())
-                .setPoBoxNumber(registerRequest.getAddress().getPoBoxNumber())
-                .build();
-
-        System.out.println("DEBUG - Created address propertyNumber: " + address.getPropertyNumber());
-        System.out.println("DEBUG - Created address poBoxNumber: " + address.getPoBoxNumber());
-        System.out.println("DEBUG - Created address unitNumber: " + address.getUnitNumber());
-
-        // Hash the password before creating customer
-        String hashedPassword = passwordEncoder.encode(registerRequest.getPassword());
-
-        Customer newCustomer = CustomerFactory.createCustomer(
-                address,
-                contact,
-                registerRequest.getFirstName(),
-                registerRequest.getLastName(),
-                0.1,
-                registerRequest.getUserName(),
-                hashedPassword,
-                "CUSTOMER"
-        );
-
-        if (newCustomer == null) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ErrorResponse("Failed to create customer entity"));
-        }
-
-        Customer savedCustomer = customerService.create(newCustomer);
-
-        // Debug what was actually saved to the database
-        System.out.println("DEBUG - Saved customer address propertyNumber: " + savedCustomer.getAddress().getPropertyNumber());
-        System.out.println("DEBUG - Saved customer address poBoxNumber: " + savedCustomer.getAddress().getPoBoxNumber());
-        System.out.println("DEBUG - Saved customer address unitNumber: " + savedCustomer.getAddress().getUnitNumber());
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedCustomer);
-
-    }
-
+    // DTO for login
     public static class LoginRequest {
         private String userName;
         private String password;
+
         public LoginRequest() {}
-        public LoginRequest(String userName, String password) {
-            this.userName = userName;
-            this.password = password;
-        }
         public String getUserName() { return userName; }
         public void setUserName(String userName) { this.userName = userName; }
         public String getPassword() { return password; }
         public void setPassword(String password) { this.password = password; }
-    }
-
-    public static class RegisterRequest {
-        private String firstName;
-        private String lastName;
-        private String userName;
-        private String password;
-        private ContactRequest contact;
-        private AddressRequest address;
-        public String getFirstName() { return firstName; }
-        public void setFirstName(String firstName) { this.firstName = firstName; }
-        public String getLastName() { return lastName; }
-        public void setLastName(String lastName) { this.lastName = lastName; }
-        public String getUserName() { return userName; }
-        public void setUserName(String userName) { this.userName = userName; }
-        public String getPassword() { return password; }
-        public void setPassword(String password) { this.password = password; }
-        public ContactRequest getContact() { return contact; }
-        public void setContact(ContactRequest contact) { this.contact = contact; }
-        public AddressRequest getAddress() { return address; }
-        public void setAddress(AddressRequest address) { this.address = address; }
-    }
-
-    public static class ContactRequest {
-        private String email;
-        private String phone;
-        public ContactRequest() {}
-        public String getEmail() { return email; }
-        public void setEmail(String email) { this.email = email; }
-        public String getPhone() { return phone; }
-        public void setPhone(String phone) { this.phone = phone; }
-    }
-
-    public static class AddressRequest {
-        private String buildingName;
-        private int unitNumber;
-        private int propertyNumber;
-        private int poBoxNumber;
-        private String street;
-        private String municipality;
-        private String province;
-        private String postalCode;
-        private String country;
-
-        public AddressRequest() {}
-
-        public String getBuildingName() { return buildingName; }
-        public void setBuildingName(String buildingName) { this.buildingName = buildingName; }
-        public int getUnitNumber() { return unitNumber; }
-        public void setUnitNumber(int unitNumber) { this.unitNumber = unitNumber; }
-        public int getPropertyNumber() { return propertyNumber; }
-        public void setPropertyNumber(int propertyNumber) { this.propertyNumber = propertyNumber; }
-        public int getPoBoxNumber() { return poBoxNumber; }
-        public void setPoBoxNumber(int poBoxNumber) { this.poBoxNumber = poBoxNumber; }
-        public String getStreet() { return street; }
-        public void setStreet(String street) { this.street = street; }
-        public String getMunicipality() { return municipality; }
-        public void setMunicipality(String municipality) { this.municipality = municipality; }
-        public String getProvince() { return province; }
-        public void setProvince(String province) { this.province = province; }
-        public String getPostalCode() { return postalCode; }
-        public void setPostalCode(String postalCode) { this.postalCode = postalCode; }
-        public String getCountry() { return country; }
-        public void setCountry(String country) { this.country = country; }
     }
 }

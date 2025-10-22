@@ -1,9 +1,15 @@
 package za.ac.cput.domain;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @MappedSuperclass
-public abstract class User {
+public abstract class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected int userId;
@@ -35,38 +41,38 @@ public abstract class User {
         this.role = builder.role;
     }
 
-    // Add getters
-    public int getUserId() {
-        return userId;
+    // Getters
+    public int getUserId() { return userId; }
+    public Address getAddress() { return address; }
+    public Contact getContact() { return contact; }
+    public String getFirstName() { return firstName; }
+    public String getLastName() { return lastName; }
+    public String getUserName() { return userName; }
+    public String getRole() { return role; }
+
+    // --- UserDetails interface methods ---
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role));
     }
 
-    public Address getAddress() {
-        return address;
-    }
+    @Override
+    public String getPassword() { return password; }
 
-    public Contact getContact() {
-        return contact;
-    }
+    @Override
+    public String getUsername() { return userName; }
 
-    public String getFirstName() {
-        return firstName;
-    }
+    @Override
+    public boolean isAccountNonExpired() { return true; }
 
-    public String getLastName() {
-        return lastName;
-    }
+    @Override
+    public boolean isAccountNonLocked() { return true; }
 
-    public String getUserName() {
-        return userName;
-    }
+    @Override
+    public boolean isCredentialsNonExpired() { return true; }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public String getRole() {
-        return role;
-    }
+    @Override
+    public boolean isEnabled() { return true; }
 
     @Override
     public String toString() {
@@ -81,7 +87,7 @@ public abstract class User {
                 '}';
     }
 
-    // Generic Builder
+    // --- Generic Builder ---
     public static abstract class Builder<T extends Builder<T>> {
         private int userId;
         private Address address;
@@ -92,48 +98,16 @@ public abstract class User {
         private String password;
         private String role;
 
-        public T setUserId(int userId) {
-            this.userId = userId;
-            return self();
-        }
-
-        public T setAddress(Address address) {
-            this.address = address;
-            return self();
-        }
-
-        public T setContact(Contact contact) {
-            this.contact = contact;
-            return self();
-        }
-
-        public T setFirstName(String firstName) {
-            this.firstName = firstName;
-            return self();
-        }
-
-        public T setLastName(String lastName) {
-            this.lastName = lastName;
-            return self();
-        }
-
-        public T setUserName(String userName) {
-            this.userName = userName;
-            return self();
-        }
-
-        public T setPassword(String password) {
-            this.password = password;
-            return self();
-        }
-
-        public T setRole(String role) {
-            this.role = role;
-            return self();
-        }
+        public T setUserId(int userId) { this.userId = userId; return self(); }
+        public T setAddress(Address address) { this.address = address; return self(); }
+        public T setContact(Contact contact) { this.contact = contact; return self(); }
+        public T setFirstName(String firstName) { this.firstName = firstName; return self(); }
+        public T setLastName(String lastName) { this.lastName = lastName; return self(); }
+        public T setUserName(String userName) { this.userName = userName; return self(); }
+        public T setPassword(String password) { this.password = password; return self(); }
+        public T setRole(String role) { this.role = role; return self(); }
 
         protected abstract T self();
-
         public abstract User build();
 
         public T copy(User user) {

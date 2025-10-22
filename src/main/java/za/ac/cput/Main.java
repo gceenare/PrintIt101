@@ -13,7 +13,7 @@ public class Main {
         SpringApplication.run(Main.class, args);
     }
 
-    @Bean
+    /*@Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
@@ -21,8 +21,9 @@ public class Main {
                 registry.addMapping("/**")      // allow CORS for all paths
                         .allowedOrigins("http://localhost:3000") // allow your React app
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("*");
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
             }
         };
-    }
+    }*/
 }
